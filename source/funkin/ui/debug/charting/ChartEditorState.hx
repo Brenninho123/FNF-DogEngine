@@ -2623,6 +2623,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     hitsoundVolumePlayer = save.chartEditorHitsoundVolumePlayer.value;
     hitsoundVolumeOpponent = save.chartEditorHitsoundVolumeOpponent.value;
     shouldPlayWelcomeMusic = save.chartEditorThemeMusic.value;
+    menubarItemHitsoundPitchNoteDirection.selected = save.chartEditorHitsoundPitchNoteDirection;
+    menubarItemRandomPitch.selected = save.chartEditorRandomPitch;
 
     menubarItemVolumeInstrumental.value = Std.int(save.chartEditorInstVolume.value * 100);
     menubarItemVolumeVocalsPlayer.value = Std.int(save.chartEditorPlayerVoiceVolume.value * 100);
@@ -2654,6 +2656,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     save.chartEditorHitsoundVolumePlayer.value = hitsoundVolumePlayer;
     save.chartEditorHitsoundVolumeOpponent.value = hitsoundVolumeOpponent;
     save.chartEditorThemeMusic.value = shouldPlayWelcomeMusic;
+    save.chartEditorHitsoundPitchNoteDirection = menubarItemHitsoundPitchNoteDirection.selected;
+    save.chartEditorRandomPitch = menubarItemRandomPitch.selected;
 
     save.chartEditorInstVolume.value = menubarItemVolumeInstrumental.value / 100.0;
     save.chartEditorPlayerVoiceVolume.value = menubarItemVolumeVocalsPlayer.value / 100.0;
@@ -5296,7 +5300,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
         {
           if (dragLengthSteps > 0)
           {
-            this.playSound(Paths.sound('chartingSounds/stretchSNAP_UI'), 1.0, 1.0, 0.2);
+            this.playSound(Paths.sound('chartingSounds/stretchSNAP_UI'));
             // Apply the new length.
             performCommand(new ExtendNoteLengthCommand(currentPlaceNoteData, dragLengthMs));
           }
@@ -5305,7 +5309,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
             // Apply the new (zero) length if we are changing the length.
             if (currentPlaceNoteData.length > 0)
             {
-              this.playSound(Paths.sound('chartingSounds/stretchSNAP_UI'), 1.0, 1.0, 0.2);
+              this.playSound(Paths.sound('chartingSounds/stretchSNAP_UI'));
               performCommand(new ExtendNoteLengthCommand(currentPlaceNoteData, 0));
             }
           }
@@ -5514,7 +5518,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
             else
             {
               // Right click removes hold from the note.
-              this.playSound(Paths.sound('chartingSounds/stretchSNAP_UI'), 1.0, 1.0, 0.2);
+              this.playSound(Paths.sound('chartingSounds/stretchSNAP_UI'));
               performCommand(new ExtendNoteLengthCommand(highlightedHoldNote.noteData, 0));
             }
           }
