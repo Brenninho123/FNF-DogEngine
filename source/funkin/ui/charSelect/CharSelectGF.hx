@@ -27,6 +27,12 @@ class CharSelectGF extends FunkinSprite implements IBPMSyncedScriptedClass
     switchGF(Constants.DEFAULT_CHARACTER);
   }
 
+  override public function destroy():Void
+  {
+    analyzer?.cleanup();
+    super.destroy();
+  }
+
   public function onStepHit(event:SongTimeScriptEvent):Void
   {
   }
