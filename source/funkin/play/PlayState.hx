@@ -67,6 +67,7 @@ import funkin.ui.transition.LoadingState;
 import funkin.util.SerializerUtil;
 import funkin.util.HapticUtil;
 import funkin.util.GRhythmUtil;
+import openfl.display.BlendMode;
 import haxe.Int64;
 #if mobile
 import funkin.util.TouchUtil;
@@ -1974,7 +1975,8 @@ class PlayState extends MusicBeatSubState
     healthBarBG.y = healthBarYPos;
     healthBarBG.screenCenter(X);
     healthBarBG.scrollFactor.set(0, 0);
-    healthBarBG.zIndex = 800;
+    healthBarBG.blend = BlendMode.MULTIPLY;
+    healthBarBG.zIndex = 801;
     add(healthBarBG);
 
     healthBar.x = healthBarBG.x + 4;
@@ -1983,7 +1985,8 @@ class PlayState extends MusicBeatSubState
     healthBar.parentVariable = 'healthLerp';
     healthBar.scrollFactor.set();
     healthBar.createFilledBar(Constants.COLOR_HEALTH_BAR_RED, Constants.COLOR_HEALTH_BAR_GREEN);
-    healthBar.zIndex = 801;
+    healthBar.numDivisions = Math.round(healthBar.width);
+    healthBar.zIndex = 800;
     add(healthBar);
 
     // The score text below the health bar.
