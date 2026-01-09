@@ -14,6 +14,7 @@ import funkin.input.PreciseInputManager;
 import funkin.audio.FunkinSound;
 import funkin.play.notes.Strumline;
 import funkin.play.notes.NoteSprite;
+import funkin.play.notes.NoteVibrationsHandler;
 import funkin.graphics.FunkinCamera;
 import funkin.graphics.FunkinSprite;
 import funkin.data.song.SongData.SongNoteData;
@@ -245,6 +246,7 @@ class OffsetMenu extends Page<OptionsState.OptionsMenuPageName>
 
     testStrumline.conductorInUse = localConductor;
     testStrumline.zIndex = 1001;
+    NoteVibrationsHandler.instance.strumlines.push(testStrumline);
     for (strum in testStrumline)
     {
       strum.alpha = 0;
@@ -854,7 +856,6 @@ class OffsetMenu extends Page<OptionsState.OptionsMenuPageName>
 
     /*debugBeatText.x = receptor.x + receptor.width * 2;
         debugBeatText.y = receptor.y - 20;
-
             debugBeatText.text = 'Beat: ' + b; */
 
     // receptor.angle += angleVel * elapsed;
@@ -973,7 +974,7 @@ class OffsetMenu extends Page<OptionsState.OptionsMenuPageName>
       testStrumline.releaseKey(input.noteDirection, input.keyCode);
     }
 
-    testStrumline.noteVibrations.tryNoteVibration();
+    NoteVibrationsHandler.instance.tryNoteVibration();
   }
 
   // Creates a button item with a callback.
@@ -998,6 +999,7 @@ class OffsetMenu extends Page<OptionsState.OptionsMenuPageName>
   {
     MenuTypedList.pauseInput = false;
     exitCalibration(true);
+    NoteVibrationsHandler.instance.strumlines.remove(testStrumline);
     super.destroy();
   }
 }
