@@ -159,7 +159,7 @@ class Paths implements ConsoleClass
     return 'songs:assets/songs/${song.toLowerCase()}/Inst$suffix$ext';
   }
 
-  public static function image(key:String, ?library:String):String
+  public static function image(key:Null<String>, ?library:String):String
   {
     return getPath('images/$key.png', IMAGE, library);
   }
