@@ -7,6 +7,8 @@ import openfl.filters.ColorMatrixFilter;
 @:nullSafety
 class RetroCameraFade
 {
+  static var fadeTimer:Null<FlxTimer>;
+
   // im lazy, but we only use this for week 6
   // and also sorta yoinked for djflixel, lol !
   public static function fadeWhite(camera:FlxCamera, camSteps:Int = 5, time:Float = 1):Void
@@ -14,7 +16,16 @@ class RetroCameraFade
     var steps:Int = 0;
     var stepsTotal:Int = camSteps;
 
-    new FlxTimer().start(time / stepsTotal, _ ->
+    if (fadeTimer != null)
+    {
+      fadeTimer.cancel();
+      fadeTimer.destroy();
+      fadeTimer = null;
+
+      camera.filters = [];
+    }
+
+    fadeTimer = new FlxTimer().start(time / stepsTotal, _ ->
     {
       var V:Float = (1 / stepsTotal) * steps;
       if (steps == stepsTotal) V = 1;
@@ -27,6 +38,13 @@ class RetroCameraFade
       ];
       camera.filters = [new ColorMatrixFilter(matrix)];
       steps++;
+
+      if (fadeTimer != null && fadeTimer.loopsLeft < 1)
+      {
+        fadeTimer.cancel();
+        fadeTimer.destroy();
+        fadeTimer = null;
+      }
     }, stepsTotal + 1);
   }
 
@@ -34,6 +52,13 @@ class RetroCameraFade
   {
     var steps:Int = camSteps;
     var stepsTotal:Int = camSteps;
+
+    if (fadeTimer != null)
+    {
+      fadeTimer.cancel();
+      fadeTimer.destroy();
+      fadeTimer = null;
+    }
 
     var matrixDerp = [
       1, 0, 0, 0, 1.0 * 255,
@@ -45,7 +70,7 @@ class RetroCameraFade
       new ColorMatrixFilter(matrixDerp)
     ];
 
-    new FlxTimer().start(time / stepsTotal, _ ->
+    fadeTimer = new FlxTimer().start(time / stepsTotal, _ ->
     {
       var V:Float = (1 / stepsTotal) * steps;
       if (steps == stepsTotal) V = 1;
@@ -58,6 +83,13 @@ class RetroCameraFade
       ];
       camera.filters = [new ColorMatrixFilter(matrix)];
       steps--;
+
+      if (fadeTimer != null && fadeTimer.loopsLeft < 1)
+      {
+        fadeTimer.cancel();
+        fadeTimer.destroy();
+        fadeTimer = null;
+      }
     }, camSteps);
   }
 
@@ -66,7 +98,16 @@ class RetroCameraFade
     var steps:Int = 0;
     var stepsTotal:Int = camSteps;
 
-    new FlxTimer().start(time / stepsTotal, _ ->
+    if (fadeTimer != null)
+    {
+      fadeTimer.cancel();
+      fadeTimer.destroy();
+      fadeTimer = null;
+
+      camera.filters = [];
+    }
+
+    fadeTimer = new FlxTimer().start(time / stepsTotal, _ ->
     {
       var V:Float = (1 / stepsTotal) * steps;
       if (steps == stepsTotal) V = 1;
@@ -79,6 +120,13 @@ class RetroCameraFade
       ];
       camera.filters = [new ColorMatrixFilter(matrix)];
       steps++;
+
+      if (fadeTimer != null && fadeTimer.loopsLeft < 1)
+      {
+        fadeTimer.cancel();
+        fadeTimer.destroy();
+        fadeTimer = null;
+      }
     }, camSteps);
   }
 
@@ -86,6 +134,15 @@ class RetroCameraFade
   {
     var steps:Int = camSteps;
     var stepsTotal:Int = camSteps;
+
+    if (fadeTimer != null)
+    {
+      fadeTimer.cancel();
+      fadeTimer.destroy();
+      fadeTimer = null;
+
+      camera.filters = [];
+    }
 
     var matrixDerp = [
       1, 0, 0, 0, -1.0 * 255,
@@ -97,7 +154,7 @@ class RetroCameraFade
       new ColorMatrixFilter(matrixDerp)
     ];
 
-    new FlxTimer().start(time / stepsTotal, _ ->
+    fadeTimer = new FlxTimer().start(time / stepsTotal, _ ->
     {
       var V:Float = (1 / stepsTotal) * steps;
       if (steps == stepsTotal) V = 1;
@@ -110,6 +167,13 @@ class RetroCameraFade
       ];
       camera.filters = [new ColorMatrixFilter(matrix)];
       steps--;
+
+      if (fadeTimer != null && fadeTimer.loopsLeft < 1)
+      {
+        fadeTimer.cancel();
+        fadeTimer.destroy();
+        fadeTimer = null;
+      }
     }, camSteps + 1);
   }
 }
