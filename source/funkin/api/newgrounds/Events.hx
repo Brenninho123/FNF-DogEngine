@@ -3,8 +3,7 @@ package funkin.api.newgrounds;
 #if FEATURE_NEWGROUNDS_EVENTS
 import io.newgrounds.Call.CallOutcome;
 import io.newgrounds.NG;
-import io.newgrounds.objects.events.Outcome;
-import io.newgrounds.objects.events.Result;
+import io.newgrounds.objects.events.Result.LogEventData;
 #end
 
 /**
