@@ -2903,7 +2903,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     setNotePreviewViewportBounds(calculateNotePreviewViewportBounds());
   }
 
-  function setSelectionBoxBounds(bounds:FlxRect = null):Void
+  function setSelectionBoxBounds(?bounds:FlxRect):Void
   {
     if (selectionBoxSprite == null)
       throw 'ERROR: Tried to set selection box bounds, but selectionBoxSprite is null! Check ChartEditorThemeHandler.updateTheme().';
@@ -2972,7 +2972,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     return bounds;
   }
 
-  function setNotePreviewViewportBounds(bounds:FlxRect = null):Void
+  function setNotePreviewViewportBounds(?bounds:FlxRect):Void
   {
     if (notePreviewViewport == null)
     {
@@ -6702,7 +6702,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   /**
    * Revive the UI camera and re-establish it as the main camera so UI elements depending on it don't explode.
    */
-  function reviveUICamera(_:FlxSubState = null):Void
+  function reviveUICamera(?_:FlxSubState):Void
   {
     uiCamera.revive();
     FlxG.cameras.reset(uiCamera);
@@ -7039,7 +7039,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
    * Fix the current scroll position after exiting the PlayState used when testing.
    */
   @:nullSafety(Off)
-  function resetConductorAfterTest(_:FlxSubState = null):Void
+  function resetConductorAfterTest(?_:FlxSubState):Void
   {
     this.persistentUpdate = true;
     this.persistentDraw = true;

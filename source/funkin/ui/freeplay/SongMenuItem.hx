@@ -546,7 +546,7 @@ class SongMenuItem extends FlxSpriteGroup
     this.y = y;
   }
 
-  public function initData(freeplayData:Null<FreeplaySongData>, ?styleData:FreeplayStyle = null, index:Int = null):Void
+  public function initData(freeplayData:Null<FreeplaySongData>, ?styleData:FreeplayStyle = null, ?index:Int):Void
   {
     this.freeplayData = freeplayData;
 
@@ -572,7 +572,7 @@ class SongMenuItem extends FlxSpriteGroup
     checkWeek();
   }
 
-  public function initRandom(?styleData:FreeplayStyle = null):Void
+  public function initRandom(?styleData:FreeplayStyle):Void
   {
     initPosition(FlxG.width, 0);
     initData(null, styleData, 1);

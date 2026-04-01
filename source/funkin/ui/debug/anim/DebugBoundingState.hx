@@ -34,10 +34,6 @@ using flixel.util.FlxSpriteUtil;
 
 class DebugBoundingState extends FlxState
 {
-  /*
-    TODAY'S TO-DO
-    - Cleaner UI
-   */
   var bg:FlxBackdrop;
   var txtGrp:FlxTypedGroup<FlxText>;
   var hudCam:FlxCamera;
@@ -493,8 +489,8 @@ class DebugBoundingState extends FlxState
 
   var swagChar:BaseCharacter;
 
-  /*
-    Called when animation dropdown is changed!
+  /**
+   * Called when animation dropdown is changed!
    */
   function loadAnimShit(char:String)
   {
