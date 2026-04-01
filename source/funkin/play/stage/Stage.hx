@@ -810,7 +810,7 @@ class Stage extends FlxSpriteGroup implements IPlayStateScriptedClass implements
   {
   }
 
-  public override function kill()
+  override public function kill()
   {
     _skipTransformChildren = true;
     alive = false;

@@ -322,11 +322,11 @@ class CharacterDataParser
    */
   public static function getCharPixelIconAsset(char:String):Null<FlxFrame>
   {
-    var charPath:String = "freeplay/icons/";
+    var charPath:String = 'freeplay/icons/';
 
-    final charIDParts:Array<String> = char.split("-");
-    var iconName:String = "";
-    var lastValidIconName:String = "";
+    final charIDParts:Array<String> = char.split('-');
+    var iconName:String = '';
+    var lastValidIconName:String = '';
     for (i in 0...charIDParts.length)
     {
       iconName += charIDParts[i];
@@ -465,7 +465,7 @@ class CharacterDataParser
   public static final DEFAULT_SCROLL:Array<Float> = [0, 0];
   public static final DEFAULT_STARTINGANIM:String = 'idle';
   public static final DEFAULT_APPLYSTAGEMATRIX:Bool = false;
-  public static final DEFAULT_ANIMTYPE:String = "framelabel";
+  public static final DEFAULT_ANIMTYPE:String = 'framelabel';
   public static final DEFAULT_ATLASSETTINGS:funkin.data.stage.StageData.TextureAtlasData = {
     swfMode: true,
     cacheOnLoad: false,

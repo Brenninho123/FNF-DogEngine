@@ -24,7 +24,7 @@ class ConversationDebugState extends MusicBeatState
     Paths.setCurrentLevel('week6');
   }
 
-  public override function create():Void
+  override public function create():Void
   {
     super.create();
     startConversation();
@@ -52,13 +52,13 @@ class ConversationDebugState extends MusicBeatState
     conversation = null;
   }
 
-  public override function dispatchEvent(event:ScriptEvent):Void
+  override public function dispatchEvent(event:ScriptEvent):Void
   {
     // Dispatch event to conversation script.
     ScriptEventDispatcher.callEvent(conversation, event);
   }
 
-  public override function update(elapsed:Float):Void
+  override public function update(elapsed:Float):Void
   {
     super.update(elapsed);
 
