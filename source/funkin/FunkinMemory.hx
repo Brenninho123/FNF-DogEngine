@@ -341,9 +341,14 @@ class FunkinMemory
     }
 
     var sound:Null<Sound> = Assets.getSound(key, true);
-    if (sound == null) return;
+    if (sound == null)
+    {
+      return;
+    }
     else
+    {
       currentCachedSounds.set(key, sound);
+    }
   }
 
   /**
@@ -355,9 +360,14 @@ class FunkinMemory
     if (permanentCachedSounds.exists(key)) return;
 
     var sound:Null<Sound> = Assets.getSound(key, true);
-    if (sound == null) return;
+    if (sound == null)
+    {
+      return;
+    }
     else
+    {
       permanentCachedSounds.set(key, sound);
+    }
 
     if (sound != null) currentCachedSounds.set(key, sound);
   }

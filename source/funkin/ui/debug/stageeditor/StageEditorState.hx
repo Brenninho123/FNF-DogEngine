@@ -536,8 +536,7 @@ class StageEditorState extends UIState
     {
       if (conductorInUse.currentBeat % 2 == 0)
       {
-        for (char in getCharacters())
-          char?.dance(true);
+        for (char in getCharacters()) char?.dance(true);
       }
 
       for (asset in spriteArray)
@@ -812,8 +811,7 @@ class StageEditorState extends UIState
 
     camMarker.visible = moveMode == "chars";
 
-    for (item in sprDependant)
-      item.disabled = (moveMode != "assets" || selectedSprite == null);
+    for (item in sprDependant) item.disabled = (moveMode != "assets" || selectedSprite == null);
 
     menubarItemPaste.disabled = copiedSprite == null;
     menubarItemFindObj.disabled = !(moveMode == "assets");
@@ -1198,14 +1196,12 @@ class StageEditorState extends UIState
 
     menubarItemViewFloorLines.onChange = function(_)
     {
-      for (awesome in floorLines)
-        awesome.visible = menubarItemViewFloorLines.selected;
+      for (awesome in floorLines) awesome.visible = menubarItemViewFloorLines.selected;
     }
 
     menubarItemViewPosMarkers.onChange = function(_)
     {
-      for (coolbeans in posCircles)
-        coolbeans.visible = menubarItemViewPosMarkers.selected;
+      for (coolbeans in posCircles) coolbeans.visible = menubarItemViewPosMarkers.selected;
     }
 
     sprDependant = [menubarItemCopy, menubarItemCut, menubarItemDelete, menubarItemSelectNone];
@@ -1214,8 +1210,7 @@ class StageEditorState extends UIState
 
   function reloadRecentFiles():Void
   {
-    for (a in menubarItemOpenRecent.childComponents)
-      menubarItemOpenRecent.removeComponent(a);
+    for (a in menubarItemOpenRecent.childComponents) menubarItemOpenRecent.removeComponent(a);
 
     for (file in Save.instance.stageEditorPreviousFiles.value)
     {
