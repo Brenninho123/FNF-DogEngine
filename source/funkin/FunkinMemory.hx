@@ -21,10 +21,6 @@ class FunkinMemory
   static var currentCachedTextures:Map<String, FlxGraphic> = [];
   static var previousCachedTextures:Map<String, FlxGraphic> = [];
 
-  static var permanentCachedSounds:Map<String, Sound> = [];
-  static var currentCachedSounds:Map<String, Sound> = [];
-  static var previousCachedSounds:Map<String, Sound> = [];
-
   static var purgeFilter:Array<String> = ["/week", "/characters", "/charSelect", "/results"];
 
   /**
@@ -86,9 +82,6 @@ class FunkinMemory
     permanentCacheSound(Paths.sound("soundtray/Voldown"));
     permanentCacheSound(Paths.sound("soundtray/VolMAX"));
     permanentCacheSound(Paths.sound("soundtray/Volup"));
-    permanentCacheSound(Paths.music("freakyMenu/freakyMenu"));
-    permanentCacheSound(Paths.music("offsetsLoop/offsetsLoop"));
-    permanentCacheSound(Paths.music("offsetsLoop/drumsLoop"));
     permanentCacheSound(Paths.sound("missnote1", "shared"));
     permanentCacheSound(Paths.sound("missnote2", "shared"));
     permanentCacheSound(Paths.sound("missnote3", "shared"));
@@ -102,8 +95,6 @@ class FunkinMemory
   {
     preparePurgeTextureCache();
     purgeTextureCache();
-    preparePurgeSoundCache();
-    purgeSoundCache();
     #if (cpp || neko || hl)
     if (callGarbageCollector) funkin.util.MemoryUtil.collect(true);
     #end
@@ -331,21 +322,7 @@ class FunkinMemory
    */
   public static function cacheSound(key:String):Void
   {
-    if (currentCachedSounds.exists(key)) return;
-
-    if (previousCachedSounds.exists(key))
-    {
-      // Move the texture from the previous cache to the current cache.
-      var sound:Null<Sound> = previousCachedSounds.get(key);
-      previousCachedSounds.remove(key);
-      if (sound != null) currentCachedSounds.set(key, sound);
-      return;
-    }
-
-    var sound:Null<Sound> = Assets.getSound(key, true);
-    if (sound == null) return;
-    else
-      currentCachedSounds.set(key, sound);
+    flixel.sound.FlxSoundData.fromAssetKey(key);
   }
 
   /**
@@ -354,64 +331,8 @@ class FunkinMemory
    */
   public static function permanentCacheSound(key:String):Void
   {
-    if (permanentCachedSounds.exists(key)) return;
-
-    var sound:Null<Sound> = Assets.getSound(key, true);
-    if (sound == null) return;
-    else
-      permanentCachedSounds.set(key, sound);
-
-    if (sound != null) currentCachedSounds.set(key, sound);
-  }
-
-  /**
-   * Prepares the cache for purging unused sounds.
-   */
-  public static function preparePurgeSoundCache():Void
-  {
-    previousCachedSounds = currentCachedSounds.copy();
-
-    for (key in previousCachedSounds.keys())
-    {
-      if (permanentCachedSounds.exists(key))
-      {
-        previousCachedSounds.remove(key);
-      }
-    }
-
-    currentCachedSounds = permanentCachedSounds.copy();
-  }
-
-  /**
-   * Purges unused sounds from the cache.
-   */
-  public static inline function purgeSoundCache():Void
-  {
-    for (key in previousCachedSounds.keys())
-    {
-      if (permanentCachedSounds.exists(key))
-      {
-        previousCachedSounds.remove(key);
-        continue;
-      }
-
-      var sound:Null<Sound> = previousCachedSounds.get(key);
-      if (sound != null)
-      {
-        Assets.cache.removeSound(key);
-        previousCachedSounds.remove(key);
-      }
-    }
-    Assets.cache.clear("songs");
-    Assets.cache.clear("music");
-    // Felt lazy.
-    var key = Paths.music("freakyMenu/freakyMenu");
-    var sound:Null<Sound> = Assets.getSound(key, true);
-    if (sound != null)
-    {
-      permanentCachedSounds.set(key, sound);
-      currentCachedSounds.set(key, sound);
-    }
+    var soundData = flixel.sound.FlxSoundData.fromAssetKey(key, false);
+    if (soundData != null) soundData.persist = true;
   }
 
   ///// MISC /////
@@ -445,9 +366,6 @@ class FunkinMemory
       if (currentCachedTextures.exists(key)) currentCachedTextures.remove(key);
       Assets.cache.clear(key);
     }
-
-    preparePurgeSoundCache();
-    purgeSoundCache();
   }
 
   /**
