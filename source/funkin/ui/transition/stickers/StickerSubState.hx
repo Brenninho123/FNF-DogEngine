@@ -28,13 +28,11 @@ typedef StickerSubStateParams =
    * The state to transition into.
    */
   ?targetState:StickerSubState->FlxState,
-
   /**
    * The sticker pack to retrieve and use.
    * @default `Constants.DEFAULT_STICKER_PACK`
    */
   ?stickerPack:String,
-
   /**
    * An existing set of stickers to transition out with.
    */
@@ -119,7 +117,7 @@ class StickerSubState extends MusicBeatSubState
       #if !mobile
       // Re-enable autoPause if it was disabled
       FlxG.autoPause = Preferences.autoPause;
-      #end  
+      #end
       regenStickers();
     }
   }

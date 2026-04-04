@@ -143,7 +143,6 @@ class FreeplayState extends MusicBeatSubState
   public var uiStateMachine:UIStateMachine = new UIStateMachine();
 
   var songs:Array<Null<FreeplaySongData>> = [];
-
   var curSelected:Int = 0;
   // curSelectedFloat is used for mobile to get "inbetween" selections for swipe/scrolling/momentum stuff
   var curSelectedFloat:Float = 0;
@@ -159,13 +158,11 @@ class FreeplayState extends MusicBeatSubState
   var currentVariation:String = Constants.DEFAULT_VARIATION;
 
   var fpScoreDisplay:FreeplayScore;
-
   var txtCompletion:AtlasText;
   var lerpCompletion:Float = 0;
   var intendedCompletion:Float = 0;
   var lerpScore:Float = 0;
   var intendedScore:Int = 0;
-
   var grpDifficulties:FlxTypedSpriteGroup<DifficultySprite>;
   var difficultyDots:FlxTypedSpriteGroup<DifficultyDot>;
 
@@ -198,27 +195,20 @@ class FreeplayState extends MusicBeatSubState
   }
 
   var grpCapsules:SongItemGroup;
-
   var dj:Null<BaseFreeplayDJ> = null;
   #if FEATURE_TOUCH_CONTROLS
   // For proper hitbox detection, flxanimate doesn't work with touch overlap!!
   var djHitbox:FlxObject = new FlxObject((CUTOUT_WIDTH * DJ_POS_MULTI), 320, 400, 400);
   var capsuleHitbox:FlxObject = new FlxObject((CUTOUT_WIDTH * SONGS_POS_MULTI) + 380, 150, CUTOUT_WIDTH + 590, 576);
   #end
-
   var ostName:FlxText;
   var albumRoll:AlbumRoll;
-
   var charSelectHint:FlxText;
-
   var letterSort:LetterSort;
   var exitMovers:ExitMoverData = new Map();
-
   var diffSelLeft:DifficultySelector;
   var diffSelRight:DifficultySelector;
-
   var exitMoversCharSel:ExitMoverData = new Map();
-
   var stickerSubState:Null<StickerSubState> = null;
 
   /**
@@ -247,7 +237,6 @@ class FreeplayState extends MusicBeatSubState
   var rankCamera:FunkinCamera;
   var rankBg:FunkinSprite;
   var rankVignette:FlxSprite;
-
   // We can use this without doing Null<BackingCard> because we initialize it in new()
 
   /**
@@ -263,7 +252,6 @@ class FreeplayState extends MusicBeatSubState
   public var angleMaskShader:AngleMask = new AngleMask();
 
   var fadeShader:BlueFade = new BlueFade();
-
   var fromResultsParams:Null<FromResultsParams> = null;
   var prepForNewRank:Bool = false;
   var styleData:Null<FreeplayStyle> = null;
@@ -576,14 +564,28 @@ class FreeplayState extends MusicBeatSubState
       FlxTween.tween(charSelectHint, {y: charSelectHint.y + 100}, 0.8, {ease: FlxEase.quartOut});
     }
 
-    exitMovers.set([overhangStuff, topLeftCornerText, ostName, charSelectHint, freeplayTxtBg, freeplayArrow], {
+    exitMovers.set([
+      overhangStuff,
+      topLeftCornerText,
+      ostName,
+      charSelectHint,
+      freeplayTxtBg,
+      freeplayArrow
+    ], {
       y: -overhangStuff.height,
       x: 0,
       speed: 0.2,
       wait: 0
     });
 
-    exitMoversCharSel.set([overhangStuff, topLeftCornerText, ostName, charSelectHint, freeplayTxtBg, freeplayArrow], {
+    exitMoversCharSel.set([
+      overhangStuff,
+      topLeftCornerText,
+      ostName,
+      charSelectHint,
+      freeplayTxtBg,
+      freeplayArrow
+    ], {
       y: -300,
       speed: 0.8,
       wait: 0.1
@@ -898,12 +900,11 @@ class FreeplayState extends MusicBeatSubState
       case 'packer':
         dj = (scriptClass != "") ? (ScriptedPackerFreeplayDJ.scriptInit(scriptClass, x, y, characterId)) : (new PackerFreeplayDJ(x, y, characterId));
       case 'custom':
-        dj = (scriptClass != "") ? (ScriptedBaseFreeplayDJ.scriptInit(scriptClass, x, y, characterId)) :
-          {
-            // force-skip intro only in fallback, since you can specify onIntroDone.dispatch in ScriptedBaseFreeplayDJ, and this is goddamn fallback
-            forceSkipIntro = true;
-            new BaseFreeplayDJ(x, y, characterId);
-          }; // We can't fallback on any other types, since the assets may be unspecified
+        dj = (scriptClass != "") ? (ScriptedBaseFreeplayDJ.scriptInit(scriptClass, x, y, characterId)) : {
+          // force-skip intro only in fallback, since you can specify onIntroDone.dispatch in ScriptedBaseFreeplayDJ, and this is goddamn fallback
+          forceSkipIntro = true;
+          new BaseFreeplayDJ(x, y, characterId);
+        }; // We can't fallback on any other types, since the assets may be unspecified
     }
   }
 
@@ -1628,13 +1629,9 @@ class FreeplayState extends MusicBeatSubState
 
   var spamTimer:Float = 0;
   var spamming:Bool = false;
-
   var originalPos:FlxPoint = new FlxPoint();
-
   var hintTimer:Float = 0;
-
   var allowPicoBulletsVibration:Bool = false;
-
   var backTransitioning:Bool = false;
 
   override function update(elapsed:Float):Void
@@ -3162,7 +3159,6 @@ class DifficultySelector extends FlxSprite
   var controls:Controls;
   var uiStateMachine:UIStateMachine;
   var whiteShader:PureColor;
-
   #if FEATURE_TOUCH_CONTROLS
   var pressed:Bool = false;
   #end
@@ -3317,7 +3313,6 @@ class FreeplaySongData
   }
 
   var _levelId:String;
-
   final songId:String;
 
   /**
@@ -3362,9 +3357,7 @@ class FreeplaySongData
   public var songStartingBpm(get, never):Float;
 
   public var difficultyRating(get, never):Int;
-
   public var scoringRank(get, never):Null<ScoringRank>;
-
   public var instance:FreeplayState;
 
   public function new(songId:String, levelData:Level, instance:FreeplayState)

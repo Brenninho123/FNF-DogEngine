@@ -15,7 +15,8 @@ import funkin.data.DefaultRegistryImpl;
 
 using funkin.data.song.migrator.SongDataMigrator;
 
-@:nullSafety class SongRegistry extends BaseRegistry<Song, SongMetadata, SongEntryParams> implements ISingleton implements DefaultRegistryImpl
+@:nullSafety
+class SongRegistry extends BaseRegistry<Song, SongMetadata, SongEntryParams> implements ISingleton implements DefaultRegistryImpl
 {
   /**
    * The current version string for the stage data format.
@@ -25,15 +26,10 @@ using funkin.data.song.migrator.SongDataMigrator;
   public static final SONG_METADATA_VERSION:thx.semver.Version = "2.2.4";
 
   public static final SONG_METADATA_VERSION_RULE:thx.semver.VersionRule = "2.2.x";
-
   public static final SONG_CHART_DATA_VERSION:thx.semver.Version = "2.0.0";
-
   public static final SONG_CHART_DATA_VERSION_RULE:thx.semver.VersionRule = "2.0.x";
-
   public static final SONG_MUSIC_DATA_VERSION:thx.semver.Version = "2.0.0";
-
   public static final SONG_MUSIC_DATA_VERSION_RULE:thx.semver.VersionRule = "2.0.x";
-
   public static var DEFAULT_GENERATEDBY(get, never):String;
 
   public var scriptedSongVariations:Map<String, Song> = new Map<String, Song>();

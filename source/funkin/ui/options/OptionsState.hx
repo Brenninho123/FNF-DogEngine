@@ -152,7 +152,6 @@ class OptionsState extends MusicBeatState
 class OptionsMenu extends Page<OptionsMenuPageName>
 {
   var items:TextMenuList;
-
   #if FEATURE_TOUCH_CONTROLS
   var backButton:FunkinBackButton;
   var goingBack:Bool = false;

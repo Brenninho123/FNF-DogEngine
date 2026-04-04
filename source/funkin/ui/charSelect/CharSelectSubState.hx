@@ -49,14 +49,12 @@ class CharSelectSubState extends MusicBeatSubState
   final DEFAULT_CURSOR_INDEX:Int = 4;
 
   var cursors:CharSelectCursors;
-
   var cursorX:Int = 0;
   var cursorY:Int = 0;
   var cursorFactor:Float = 110;
   var cursorOffsetX:Float = -16;
   var cursorOffsetY:Float = -48;
   var cursorLocIntended:FlxPoint = new FlxPoint(0, 0);
-
   var playerChill:CharSelectPlayer;
   var playerChillOut:CharSelectPlayer;
   var gfChill:CharSelectGF;
@@ -74,23 +72,19 @@ class CharSelectSubState extends MusicBeatSubState
   var pressedSelect:Bool = false;
   var selectTimer:FlxTimer = new FlxTimer();
   var allowInput:Bool = false;
-
   var selectSound:FunkinSound = new FunkinSound();
   var unlockSound:FunkinSound = new FunkinSound();
   var lockedSound:FunkinSound = new FunkinSound();
   var introSound:FunkinSound = new FunkinSound();
   var staticSound:FunkinSound = new FunkinSound();
-
-  var selectedBizz:Array<BitmapFilter> = [new DropShadowFilter(0, 0, 0xFFFFFF, 1, 2, 2, 19, 1, false, false,
-    false), new DropShadowFilter(5, 45, 0x000000, 1, 2, 2, 1, 1, false, false, false)];
-
+  var selectedBizz:Array<BitmapFilter> = [
+    new DropShadowFilter(0, 0, 0xFFFFFF, 1, 2, 2, 19, 1, false, false, false),
+    new DropShadowFilter(5, 45, 0x000000, 1, 2, 2, 1, 1, false, false, false)
+  ];
   var bopInfo:Null<Null<FramesJSFLInfo>>;
-
   // var blackScreen:FunkinSprite;
   var charHitbox:FlxObject = new FlxObject();
-
   var cutoutSize:Float = 0;
-
   var fadeShader:BlueFade = new BlueFade();
 
   public function new(?params:CharSelectSubStateParams)
@@ -300,7 +294,13 @@ class CharSelectSubState extends MusicBeatSubState
 
     nametag.scrollFactor.set();
 
-    FlxG.debugger.addTrackerProfile(new TrackerProfile(FunkinSprite, ["x", "y", "alpha", "scale", "blend"]));
+    FlxG.debugger.addTrackerProfile(new TrackerProfile(FunkinSprite, [
+      "x",
+      "y",
+      "alpha",
+      "scale",
+      "blend"
+    ]));
     FlxG.debugger.addTrackerProfile(new TrackerProfile(FlxSound, ["pitch", "volume"]));
 
     add(cursors);
@@ -726,10 +726,8 @@ class CharSelectSubState extends MusicBeatSubState
   var holdTmrRight:Float = 0;
   var spamDirections:FlxDirectionFlags = NONE;
   var initSpam = 0.5;
-
   var mobileDeny:Bool = false;
   var mobileAccept:Bool = false;
-
   var wentBackToFreeplay:Bool = false;
 
   override public function update(elapsed:Float):Void

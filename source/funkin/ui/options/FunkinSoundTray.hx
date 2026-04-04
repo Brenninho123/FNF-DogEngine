@@ -16,7 +16,6 @@ class FunkinSoundTray extends FlxSoundTray
   var graphicScale:Float = 0.30;
   var lerpYPos:Float = 0;
   var alphaTarget:Float = 0;
-
   var volumeMaxSound:String;
 
   public function new()
@@ -145,7 +144,8 @@ class FunkinSoundTray extends FlxSoundTray
   {
     var globalVolume:Int = FlxG.sound.muted || FlxG.sound.volume == 0 ? 0 : Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
 
-    for (i in 0..._bars.length) _bars[i].visible = i < globalVolume;
+    for (i in 0..._bars.length)
+      _bars[i].visible = i < globalVolume;
   }
 
   function saveVolumePreferences():Void

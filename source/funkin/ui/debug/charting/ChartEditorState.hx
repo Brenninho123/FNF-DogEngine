@@ -149,10 +149,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   public static final CHART_EDITOR_TOOLBOX_EVENT_DATA_LAYOUT:String = Paths.ui('chart-editor/toolbox/event-data');
   public static final CHART_EDITOR_TOOLBOX_FREEPLAY_LAYOUT:String = Paths.ui('chart-editor/toolbox/freeplay');
   public static final CHART_EDITOR_TOOLBOX_PLAYTEST_PROPERTIES_LAYOUT:String = Paths.ui('chart-editor/toolbox/playtest-properties');
-
   // Validation
   public static final SUPPORTED_MUSIC_FORMATS:Array<String> = #if sys ['ogg'] #else ['mp3'] #end;
-
   // Layout
 
   /**
@@ -227,7 +225,6 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   public static final PLAYHEAD_SCROLL_AREA_COLOR:FlxColor = 0xFF682B2F;
   public static final SPECTROGRAM_COLOR:FlxColor = 0xFFFF0000;
   public static final PLAYHEAD_COLOR:FlxColor = 0xC0BD0231;
-
   // Timings
 
   /**
@@ -250,7 +247,19 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   /**
    * Precisions of notes you can snap to.
    */
-  public static final SNAP_QUANTS:Array<Int> = [4, 8, 12, 16, 20, 24, 32, 48, 64, 96, 192];
+  public static final SNAP_QUANTS:Array<Int> = [
+    4,
+    8,
+    12,
+    16,
+    20,
+    24,
+    32,
+    48,
+    64,
+    96,
+    192
+  ];
 
   /**
    * The default note snapping value.
@@ -265,13 +274,17 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   /**
    * A map of the keys for every live input style.
    */
-  public static final LIVE_INPUT_KEYS:Map<ChartEditorLiveInputStyle, Array<FlxKey>> = [NumberKeys => [
-    FIVE, SIX, SEVEN, EIGHT,
-     ONE, TWO, THREE,  FOUR
-  ], WASDKeys => [
-    LEFT, DOWN, UP, RIGHT,
-       A,    S,  W,     D
-    ], None => []];
+  public static final LIVE_INPUT_KEYS:Map<ChartEditorLiveInputStyle, Array<FlxKey>> = [
+    NumberKeys => [
+      FIVE, SIX, SEVEN, EIGHT,
+       ONE, TWO, THREE,  FOUR
+    ],
+    WASDKeys => [
+      LEFT, DOWN, UP, RIGHT,
+         A,    S,  W,     D
+    ],
+    None => []
+  ];
 
   /**
    * INSTANCE DATA
@@ -282,7 +295,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   /**
    * The length of the current instrumental, in milliseconds.
    */
-  @:isVar var songLengthInMs(get, set):Float = 0;
+  @:isVar
+  var songLengthInMs(get, set):Float = 0;
 
   function get_songLengthInMs():Float
   {
@@ -775,7 +789,14 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
    * The audio volume before it was toggled to zero.
    * Metronome, hitsounds (player and enemy), instrumental, vocals (player and enemy)
    */
-  var previousAudioVolumes:Array<Float> = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
+  var previousAudioVolumes:Array<Float> = [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ];
 
   /**
    * Whether hitsounds are enabled for at least one character.
@@ -789,7 +810,6 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
 
   var stretchySound1:Null<FunkinSound> = null;
   var stretchySound2:Null<FunkinSound> = null;
-
   // Auto-save
 
   /**
@@ -1154,7 +1174,6 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
    */
   var clipboardValid:Bool = true;
 
-
   /**
    * If true, we are currently in the process of quitting the chart editor.
    * Skip any update functions as most of them will call a crash.
@@ -1361,7 +1380,10 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
 
   function get_availableVariations():Array<String>
   {
-    var variations:Array<String> = [for (x in songMetadata.keys()) x];
+    var variations:Array<String> = [
+      for (x in songMetadata.keys())
+        x
+    ];
     variations.sort(SortUtil.defaultThenAlphabetically.bind('default'));
     return variations;
   }
@@ -1390,11 +1412,16 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
 
   function get_allDifficulties():Array<String>
   {
-    var result:Array<Array<String>> = [for (x in availableVariations)
-    {
-      var m:Null<SongMetadata> = songMetadata.get(x);
-      [for (diff in (m?.playData?.difficulties ?? [])) '$diff-$x'];
-    }];
+    var result:Array<Array<String>> = [
+      for (x in availableVariations)
+      {
+        var m:Null<SongMetadata> = songMetadata.get(x);
+        [
+          for (diff in (m?.playData?.difficulties ?? []))
+            '$diff-$x'
+        ];
+      }
+    ];
     return result.flatten();
   }
 
@@ -1440,7 +1467,11 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     var result:Null<SongChartData> = songChartData.get(selectedVariation);
     if (result == null)
     {
-      result = new SongChartData([Constants.DEFAULT_DIFFICULTY => 1.0], [], [Constants.DEFAULT_DIFFICULTY => []]);
+      result = new SongChartData([
+        Constants.DEFAULT_DIFFICULTY => 1.0
+      ], [], [
+        Constants.DEFAULT_DIFFICULTY => []
+      ]);
       songChartData.set(selectedVariation, result);
     }
     return result;
@@ -1453,7 +1484,10 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     if (variationMetadata != null)
     {
       // Add the chartdata difficulties to the metadata difficulties if they don't exist so that the editor properly loads them
-      var keys:Array<String> = [for (x in songChartData.get(selectedVariation).notes.keys()) x];
+      var keys:Array<String> = [
+        for (x in songChartData.get(selectedVariation).notes.keys())
+          x
+      ];
       for (key in keys)
       {
         variationMetadata.playData.difficulties.pushUnique(key);
@@ -1577,8 +1611,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   function get_currentSongAlbum():Null<String>
   {
     if (currentSongMetadata.playData.album == null
-    || currentSongMetadata.playData.album == ''
-    || currentSongMetadata.playData.album == 'item')
+      || currentSongMetadata.playData.album == ''
+      || currentSongMetadata.playData.album == 'item')
     {
       // Initialize to the default value if not set.
       currentSongMetadata.playData.album = Constants.DEFAULT_ALBUM_ID;
@@ -1596,8 +1630,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   function get_currentSongStickerPack():Null<String>
   {
     if (currentSongMetadata.playData.stickerPack == null
-    || currentSongMetadata.playData.stickerPack == ''
-    || currentSongMetadata.playData.stickerPack == 'item')
+      || currentSongMetadata.playData.stickerPack == ''
+      || currentSongMetadata.playData.stickerPack == 'item')
     {
       // Initialize to the default value if not set.
       currentSongMetadata.playData.stickerPack = Constants.DEFAULT_STICKER_PACK;
@@ -2372,7 +2406,6 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   var renderedEvents:FlxTypedSpriteGroup<ChartEditorEventSprite> = new FlxTypedSpriteGroup<ChartEditorEventSprite>();
 
   var renderedSelectionSquares:FlxTypedSpriteGroup<ChartEditorSelectionSquareSprite> = new FlxTypedSpriteGroup<ChartEditorSelectionSquareSprite>();
-
   /**
    * LIFE CYCLE FUNCTIONS
    */
@@ -2561,7 +2594,8 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     this.welcomeMusic.looped = true;
   }
 
-  public function resetPreviewTimes() {
+  public function resetPreviewTimes()
+  {
     currentSongFreeplayPreviewStart = (currentSongMetadata?.playData?.previewStart ?? Constants.DEFAULT_PREVIEW_START_TIME);
     currentSongFreeplayPreviewEnd = (currentSongMetadata?.playData?.previewEnd ?? Constants.DEFAULT_PREVIEW_END_TIME);
   }
@@ -3340,9 +3374,11 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
 
     menubarItemSelectNone.onClick = _ -> performCommand(new DeselectAllItemsCommand());
 
-    menubarItemSelectBeforePlayhead.onClick = _ -> performCommand(new SelectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, true, true, true));
+    menubarItemSelectBeforePlayhead.onClick = _ -> performCommand(new SelectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, true, true,
+      true));
 
-    menubarItemSelectAfterPlayhead.onClick = _ -> performCommand(new SelectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, false, true, true));
+    menubarItemSelectAfterPlayhead.onClick = _ -> performCommand(new SelectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, false, true,
+      true));
 
     menubarItemPlaytestFull.onClick = _ -> testSongInPlayState(false);
     menubarItemPlaytestMinimal.onClick = _ -> testSongInPlayState(true);
@@ -3650,11 +3686,16 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
       else
       {
         displayAutosavePopup = false;
-        var absoluteBackupsPath:String = Path.join([Sys.getCwd(), ChartEditorImportExportHandler.BACKUPS_PATH]);
-        this.infoWithActions('Auto-Save', 'Chart auto-saved to ${absoluteBackupsPath}.', [{
-          text: "Open In Folder",
-          callback: openBackupsFolder,
-        }]);
+        var absoluteBackupsPath:String = Path.join([
+          Sys.getCwd(),
+          ChartEditorImportExportHandler.BACKUPS_PATH
+        ]);
+        this.infoWithActions('Auto-Save', 'Chart auto-saved to ${absoluteBackupsPath}.', [
+          {
+            text: "Open In Folder",
+            callback: openBackupsFolder,
+          }
+        ]);
       }
     }
     #end
@@ -3668,7 +3709,10 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   {
     #if sys
     // TODO: Is there a way to open a folder and highlight a file in it?
-    var absoluteBackupsPath:String = Path.join([Sys.getCwd(), ChartEditorImportExportHandler.BACKUPS_PATH]);
+    var absoluteBackupsPath:String = Path.join([
+      Sys.getCwd(),
+      ChartEditorImportExportHandler.BACKUPS_PATH
+    ]);
     FileUtil.openFolder(absoluteBackupsPath);
     return true;
     #else
@@ -4879,7 +4923,10 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
           // We build a list of columns to select.
           var columnStart:Int = Std.int(Math.min(cursorColumnBase, cursorColumnBaseStart));
           var columnEnd:Int = Std.int(Math.max(cursorColumnBase, cursorColumnBaseStart));
-          var columns:Array<Int> = [for (i in columnStart...(columnEnd + 1)) i].map(function(i:Int):Int
+          var columns:Array<Int> = [
+            for (i in columnStart...(columnEnd + 1))
+              i
+          ].map(function(i:Int):Int
           {
             if (i >= eventColumn)
             {
@@ -6023,9 +6070,12 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     {
       waveform.x = switch (waveform.iconId)
       {
-        case BF: healthIconBF != null ? healthIconBF.x : 840 + FullScreenScaleMode.gameCutoutSize.x * 0.5;
-        case DAD: healthIconDad != null ? healthIconDad.x : 360 + FullScreenScaleMode.gameCutoutSize.x * 0.5;
-        default: 0;
+        case BF:
+          healthIconBF != null ? healthIconBF.x : 840 + FullScreenScaleMode.gameCutoutSize.x * 0.5;
+        case DAD:
+          healthIconDad != null ? healthIconDad.x : 360 + FullScreenScaleMode.gameCutoutSize.x * 0.5;
+        default:
+          0;
       }
     }
 
@@ -6275,8 +6325,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     if (FlxG.keys.pressed.SHIFT && FlxG.keys.justPressed.HOME)
     {
       // CTRL +  SHIFT + Home = Inverse - deselect all above playhead
-      if (FlxG.keys.pressed.CONTROL)
-      performCommand(new DeselectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, true, true, true));
+      if (FlxG.keys.pressed.CONTROL) performCommand(new DeselectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, true, true, true));
       else
         performCommand(new SelectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, true, true, true));
     }
@@ -6285,8 +6334,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     if (FlxG.keys.pressed.SHIFT && FlxG.keys.justPressed.END)
     {
       // CTRL +  SHIFT + Home = Inverse - deselect all below playhead
-      if (FlxG.keys.pressed.CONTROL)
-      performCommand(new DeselectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, false, true, true));
+      if (FlxG.keys.pressed.CONTROL) performCommand(new DeselectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, false, true, true));
       else
         performCommand(new SelectAllItemsBetweenTimeCommand(scrollPositionInMs + playheadPositionInMs, false, true, true));
     }
@@ -6891,7 +6939,9 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
         var currentVariationIndex:Int = availableVariations.indexOf(selectedVariation);
         var prevVariation = availableVariations[currentVariationIndex - 1];
         var prevVariationDifficulties:Array<String> = getAvailableDifficulties(prevVariation);
-        var prevDifficulty = prevVariationDifficulties[prevVariationDifficulties.length - 1];
+        var prevDifficulty = prevVariationDifficulties[
+          prevVariationDifficulties.length - 1
+        ];
 
         trace('${selectedVariation}:${selectedDifficulty} -> ${prevVariation}:${prevDifficulty}');
         performCommand(new SwitchDifficultyCommand(selectedDifficulty, prevDifficulty, selectedVariation, prevVariation));
@@ -7000,11 +7050,16 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
       #if sys
       haxe.ui.Toolkit.callLater(() ->
       {
-        var absoluteBackupsPath:String = Path.join([Sys.getCwd(), ChartEditorImportExportHandler.BACKUPS_PATH]);
-        this.infoWithActions('Auto-Save', 'Chart auto-saved to ${absoluteBackupsPath}.', [{
-          text: "Open In Folder",
-          callback: openBackupsFolder,
-        }]);
+        var absoluteBackupsPath:String = Path.join([
+          Sys.getCwd(),
+          ChartEditorImportExportHandler.BACKUPS_PATH
+        ]);
+        this.infoWithActions('Auto-Save', 'Chart auto-saved to ${absoluteBackupsPath}.', [
+          {
+            text: "Open In Folder",
+            callback: openBackupsFolder,
+          }
+        ]);
       });
       #else
       // TODO: No auto-save on HTML5?
@@ -7196,7 +7251,6 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
   var _scriptNoteObj:NoteSprite = null;
 
   var _noteScriptEvent:NoteScriptEvent = null;
-
   var _currentEvents = null;
   var _allowedEvents = null;
   var _eventTarget:Null<CharacterPlayer> = null;

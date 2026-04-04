@@ -544,7 +544,6 @@ class PlayState extends MusicBeatSubState
   var discordRPCAlbum:String = '';
   var discordRPCIcon:String = '';
   #end
-
   /**
    * RENDER OBJECTS
    */
@@ -732,10 +731,8 @@ class PlayState extends MusicBeatSubState
   static final MUSIC_EASE_RATIO:Float = 42;
 
   var mirrorSongData:Bool = false;
-
   // TODO: Refactor or document
   var generatedMusic:Bool = false;
-
   var skipEndingTransition:Bool = false;
 
   static final BACKGROUND_COLOR:FlxColor = FlxColor.BLACK;
@@ -2302,8 +2299,35 @@ class PlayState extends MusicBeatSubState
   {
     pauseButton.animation.addByIndices('idle', 'back', [0], "", 24, false);
     pauseButton.animation.addByIndices('hold', 'back', [5], "", 24, false);
-    pauseButton.animation.addByIndices('confirm', 'back',
-      [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], "", 24, false);
+    pauseButton.animation.addByIndices('confirm', 'back', [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ], "", 24, false);
     pauseButton.scale.set(0.8, 0.8);
     pauseButton.updateHitbox();
     pauseButton.animation.play("idle");

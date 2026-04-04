@@ -43,8 +43,10 @@ class FunkinHint extends FunkinButton
    * - The second value corresponds to the alpha when the hint is not pressed.
    * - The third value corresponds to the duratuon it'll take to tween between the two values.
    */
-  static final HINT_ALPHA_STYLE:Map<FunkinHintAlphaStyle,
-    Array<Float>> = [INVISIBLE_TILL_PRESS => [0.3, 0.00001, 0.01], VISIBLE_TILL_PRESS => [0.4, 0.2, 0.08]];
+  static final HINT_ALPHA_STYLE:Map<FunkinHintAlphaStyle, Array<Float>> = [
+    INVISIBLE_TILL_PRESS => [0.3, 0.00001, 0.01],
+    VISIBLE_TILL_PRESS => [0.4, 0.2, 0.08]
+  ];
 
   /**
    * Indicates whether the hint is pixel.
@@ -77,7 +79,6 @@ class FunkinHint extends FunkinButton
   var alphaTween:Null<FlxTween>;
 
   var followTarget:Null<FunkinSprite>;
-
   var followTargetSize:Bool = false;
 
   /**
@@ -653,10 +654,42 @@ class FunkinHitbox extends FlxTypedSpriteGroup<FunkinHint>
 
     return switch (facing)
     {
-      case UP: [width / 2, 0, 0, height, width, height];
-      case DOWN: [0, 0, width, 0, width / 2, height];
-      case LEFT: [0, 0, width, height / 2, 0, height];
-      case RIGHT: [width, 0, 0, height / 2, width, height];
+      case UP:
+        [
+          width / 2,
+          0,
+          0,
+          height,
+          width,
+          height
+        ];
+      case DOWN:
+        [
+          0,
+          0,
+          width,
+          0,
+          width / 2,
+          height
+        ];
+      case LEFT:
+        [
+          0,
+          0,
+          width,
+          height / 2,
+          0,
+          height
+        ];
+      case RIGHT:
+        [
+          width,
+          0,
+          0,
+          height / 2,
+          width,
+          height
+        ];
     }
   }
 

@@ -35,7 +35,6 @@ class TitleState extends MusicBeatState
   var credGroup:FlxGroup;
   var textGroup:FlxGroup;
   var ngSpr:FunkinSprite;
-
   var curWacky:Array<String> = [];
   var lastBeat:Int = 0;
   var swagShader:ColorSwap;
@@ -62,7 +61,6 @@ class TitleState extends MusicBeatState
   var gfDance:FunkinSprite;
   var danceLeft:Bool = false;
   var titleText:FunkinSprite;
-
   #if FEATURE_VIDEO_PLAYBACK
   var attractTimer:FlxTimer;
   #end
@@ -86,8 +84,41 @@ class TitleState extends MusicBeatState
 
     gfDance = new FunkinSprite((FlxG.width * 0.4) + FullScreenScaleMode.gameCutoutSize.x / 2.5, FlxG.height * 0.07);
     gfDance.frames = Paths.getSparrowAtlas('gfDanceTitle');
-    gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-    gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+    gfDance.animation.addByIndices('danceLeft', 'gfDance', [
+      30,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ], "", 24, false);
+    gfDance.animation.addByIndices('danceRight', 'gfDance', [
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ], "", 24, false);
 
     gfDance.shader = swagShader.shader;
 
@@ -305,7 +336,16 @@ class TitleState extends MusicBeatState
     super.draw();
   }
 
-  var cheatArray:Array<Int> = [0x0001, 0x0010, 0x0001, 0x0010, 0x0100, 0x1000, 0x0100, 0x1000];
+  var cheatArray:Array<Int> = [
+    0x0001,
+    0x0010,
+    0x0001,
+    0x0010,
+    0x0100,
+    0x1000,
+    0x0100,
+    0x1000
+  ];
   var curCheatPos:Int = 0;
   var cheatActive:Bool = false;
 
