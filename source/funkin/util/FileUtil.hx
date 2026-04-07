@@ -394,6 +394,21 @@ class FileUtil
     }, onCancel, defaultPath);
   }
 
+  public static function saveStageAsFNFS(resources:Array<Entry>, ?onSave:(Array<String>) -> Void, ?onCancel:() -> Void, ?defaultPath:String,
+      force:Bool = false):Bool
+  {
+    saveFile('Save stage as FNFS...', createZIPFromEntries(resources), [FILE_FILTER_FNFS], function(path:String)
+    {
+      trace('Saved FNFS file to "$path"');
+
+      if (onSave != null)
+      {
+        onSave([path]);
+      }
+    }, onCancel, defaultPath);
+    return true;
+  }
+
   /**
    * Takes an array of file entries and forcibly writes a ZIP to the given path.
    *
