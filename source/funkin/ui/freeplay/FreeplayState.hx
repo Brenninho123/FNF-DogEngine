@@ -1068,7 +1068,7 @@ class FreeplayState extends MusicBeatSubState
 
   function rankAnimStart(fromResults:FromResultsParams, capsuleToRank:SongMenuItem):Void
   {
-    dispatchEvent(new CapsuleScriptEvent(FREEPLAY_NEW_RANK, currentCapsule, currentDifficulty, currentVariation));
+    dispatchEvent(new CapsuleScriptEvent(FREEPLAY_NEW_RANK, currentCapsule, currentDifficulty, currentVariation, fromResults?.newRank));
 
     uiStateMachine.transition(Interacting);
     // We get the current selected capsule, in-case someone changes the song selection during a timer
@@ -1149,7 +1149,7 @@ class FreeplayState extends MusicBeatSubState
 
   function rankDisplayNew(fromResults:Null<FromResultsParams>, capsuleToRank:SongMenuItem):Void
   {
-    dispatchEvent(new CapsuleScriptEvent(FREEPLAY_RANK_SLAM, currentCapsule, currentDifficulty, currentVariation));
+    dispatchEvent(new CapsuleScriptEvent(FREEPLAY_RANK_SLAM, currentCapsule, currentDifficulty, currentVariation, fromResults?.newRank));
 
     capsuleToRank.ranking.visible = true;
     capsuleToRank.blurredRanking.visible = true;
@@ -1258,7 +1258,7 @@ class FreeplayState extends MusicBeatSubState
       // Capsule slam vibration.
       HapticUtil.vibrate(Constants.DEFAULT_VIBRATION_PERIOD, Constants.DEFAULT_VIBRATION_DURATION, Constants.MAX_VIBRATION_AMPLITUDE);
 
-      dispatchEvent(new CapsuleScriptEvent(FREEPLAY_CAPSULE_SLAM, currentCapsule, currentDifficulty, currentVariation));
+      dispatchEvent(new CapsuleScriptEvent(FREEPLAY_CAPSULE_SLAM, currentCapsule, currentDifficulty, currentVariation, fromResultsParams?.newRank));
 
       funnyCam.shake(0.0045, 0.35);
 
