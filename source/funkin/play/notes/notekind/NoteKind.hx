@@ -15,9 +15,9 @@ class NoteKind implements INoteScriptedClass
   public var noteKind:String;
 
   /**
-   * Title used in the Chart Editor.
+   * Description used in the Chart Editor.
    */
-  public var title:String;
+  public var description:String;
 
   /**
    * Custom Note Style of this Note Style.
@@ -41,10 +41,10 @@ class NoteKind implements INoteScriptedClass
    */
   public var scoreable(default, default):Bool = true;
 
-  public function new(noteKind:String, title:String = "", ?noteStyleId:String, ?noanim:Bool, ?suffix:String)
+  public function new(noteKind:String, description:String = '', ?noteStyleId:String, ?noanim:Bool, ?suffix:String)
   {
     this.noteKind = noteKind;
-    this.title = title;
+    this.description = description;
     this.noteStyleId = noteStyleId;
     this.noanim = noanim ?? false;
     this.suffix = suffix ?? '';
@@ -64,9 +64,9 @@ class NoteKind implements INoteScriptedClass
    * Used for the chart editor.
    * @return The title.
    */
-  public function getTitle():String
+  public function getDescription():String
   {
-    return this.title.toTitleCase();
+    return this.description;
   }
 
   public function toString():String

@@ -1261,6 +1261,15 @@ class SongNoteDataRaw implements ICloneable<SongNoteDataRaw>
     }
   }
 
+  /**
+   * Retrieve the NoteKind handler class for this bote.
+   * @return The handler class, or `null` if not found.
+   */
+  public function getHandler():Null<NoteKind>
+  {
+    return NoteKindManager.getNoteKind(this.kind);
+  }
+
   public function getSchema():Null<SongNoteSchema>
   {
     return NoteKindManager.getNoteSchema(this.kind);
@@ -1372,11 +1381,15 @@ class SongNoteDataRaw implements ICloneable<SongNoteDataRaw>
    */
   public function buildTooltip():String
   {
+    if ((this.kind?.length ?? 0) == 0) return '';
+
+    var noteHandler = getHandler();
     var noteSchema = getSchema();
 
-    if (noteSchema == null) return null;
+    var noteKindDesc:String = noteHandler?.getDescription() ?? this.kind;
+    var result:String = 'Kind: $noteKindDesc';
 
-    var result = '${this.kind}';
+    if (noteSchema == null) return result;
 
     var defaultKey = noteSchema.getFirstField()?.name;
     var paramsStruct:haxe.DynamicAccess<Dynamic> = paramsAsStruct(defaultKey);

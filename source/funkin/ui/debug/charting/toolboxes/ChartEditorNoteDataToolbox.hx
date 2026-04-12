@@ -162,18 +162,18 @@ class ChartEditorNoteDataToolbox extends ChartEditorBaseToolbox
 
     if (toolboxNotesNoteKind.value.id != '~CUSTOM~') return;
 
-      if (!_initializing && chartEditorState.currentNoteSelection.length > 0)
+    if (!_initializing && chartEditorState.currentNoteSelection.length > 0)
+    {
+      // Edit the note data of any selected notes.
+      for (note in chartEditorState.currentNoteSelection)
       {
-        // Edit the note data of any selected notes.
-        for (note in chartEditorState.currentNoteSelection)
-        {
-          note.kind = chartEditorState.noteKindToPlace;
-        }
-        chartEditorState.saveDataDirty = true;
-        chartEditorState.noteDisplayDirty = true;
-        chartEditorState.notePreviewDirty = true;
+        note.kind = chartEditorState.noteKindToPlace;
       }
-    };
+      chartEditorState.saveDataDirty = true;
+      chartEditorState.noteDisplayDirty = true;
+      chartEditorState.notePreviewDirty = true;
+    }
+
     toolboxNotesCustomKind.pauseEvent(UIEvent.CHANGE, true);
 
     toolboxNotesCustomKind.value = chartEditorState.noteKindToPlace;
