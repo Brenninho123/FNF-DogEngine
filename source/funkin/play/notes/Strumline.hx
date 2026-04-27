@@ -9,8 +9,11 @@ import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
+import flixel.util.FlxTimer;
+import funkin.audio.FunkinSound;
 import funkin.graphics.FunkinSprite;
 import funkin.data.song.SongData.SongNoteData;
+import funkin.play.notes.notehitsound.NoteHitsound;
 import funkin.util.SortUtil;
 import funkin.util.GRhythmUtil;
 import funkin.play.notes.notekind.NoteKind;
@@ -953,6 +956,20 @@ class Strumline extends FlxSpriteGroup
   {
     playConfirm(note.direction);
     note.hasBeenHit = true;
+
+    if (isPlayer && Preferences.hitsoundVolume > 0)
+    {
+      // Calculate the time until the note should be hit.
+      // Clamp it afterwards so we never schedule in the past, or too far ahead.
+      var msUntilHit:Float = note.strumTime - Conductor.instance.songPosition;
+      var waitTime:Float = Math.max(0, msUntilHit) / 1000.0;
+
+      // Give a minor delay before playing the note hitsound to prevent audio lag.
+      new FlxTimer().start(waitTime, function(_)
+      {
+        NoteHitsound.playType(Preferences.hitsoundType, Preferences.hitsoundVolume / 100.0);
+      });
+    }
 
     if (removeNote)
     {

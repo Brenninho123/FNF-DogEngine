@@ -4,6 +4,7 @@ package funkin;
 import funkin.mobile.ui.FunkinHitbox;
 import funkin.mobile.util.InAppPurchasesUtil;
 #end
+import funkin.play.notes.notehitsound.NoteHitsound.NoteHitsoundType;
 import funkin.save.Save;
 import funkin.util.WindowUtil;
 import funkin.util.HapticUtil.HapticsMode;
@@ -145,6 +146,44 @@ class Preferences
   {
     var save:Save = Save.instance;
     save.options.zoomCamera = value;
+    Save.system.flush();
+    return value;
+  }
+
+  /**
+   * The type of sound played when a note is hit.
+   * @default `None`
+   */
+  public static var hitsoundType(get, set):NoteHitsoundType;
+
+  static function get_hitsoundType():NoteHitsoundType
+  {
+    return Save?.instance?.options?.hitsoundType ?? NoteHitsoundType.None;
+  }
+
+  static function set_hitsoundType(value:NoteHitsoundType):NoteHitsoundType
+  {
+    var save:Save = Save.instance;
+    save.options.hitsoundType = value;
+    Save.system.flush();
+    return value;
+  }
+
+  /**
+   * Adjust the volume of the note hitsound type.
+   * @default `50`
+   */
+  public static var hitsoundVolume(get, set):Int;
+
+  static function get_hitsoundVolume():Int
+  {
+    return Save?.instance?.options?.hitsoundVolume ?? 0;
+  }
+
+  static function set_hitsoundVolume(value:Int):Int
+  {
+    var save:Save = Save.instance;
+    save.options.hitsoundVolume = value;
     Save.system.flush();
     return value;
   }

@@ -3,6 +3,7 @@ package funkin.save;
 import flixel.util.FlxSave;
 import funkin.input.Controls.Device;
 import funkin.data.character.CharacterData.CharacterDataParser;
+import funkin.play.notes.notehitsound.NoteHitsound.NoteHitsoundType;
 import funkin.play.scoring.Scoring;
 import funkin.play.scoring.Scoring.ScoringRank;
 import funkin.save.migrator.RawSaveData_v1_0_0;
@@ -110,6 +111,8 @@ class Save implements ConsoleClass
         autoPause: true,
         vsyncMode: 'Off',
         strumlineBackgroundOpacity: 0,
+        hitsoundType: NoteHitsoundType.None,
+        hitsoundVolume: 50,
         autoFullscreen: false,
         globalOffset: 0,
         audioVisualOffset: 0,
@@ -1132,6 +1135,18 @@ typedef SaveDataOptions =
    * @default `false`
    */
   var zoomCamera:Bool;
+
+  /**
+   * The type of sound played when a note is hit.
+   * @default `None`
+   */
+  var hitsoundType:String;
+
+  /**
+   * Adjust the volume of the note hitsound type.
+   * @default `50`
+   */
+  var hitsoundVolume:Int;
 
   /**
    * If enabled, an FPS and memory counter will be displayed even if this is not a debug build.
