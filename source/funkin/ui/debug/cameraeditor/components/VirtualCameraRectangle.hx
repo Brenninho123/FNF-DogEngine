@@ -763,7 +763,8 @@ class VirtualCameraRectangle extends FlxSpriteGroup
 
     if (!showPassepartout) return;
 
-    var scaleAmt:Float = ((Math.abs(FlxG.camera.scroll.x - vcamPoint.x) * 2) + FlxG.width) / FlxG.camera.zoom;
+    var scaleAmtX:Float = (FlxG.width * 3 + Math.abs(FlxG.camera.scroll.x) * 4 + Math.abs(vcamPoint.x) * 4) / FlxG.camera.zoom;
+    var scaleAmtY:Float = (FlxG.height * 3 + Math.abs(FlxG.camera.scroll.y) * 4 + Math.abs(vcamPoint.y) * 4) / FlxG.camera.zoom;
     var extraSize:Float = showExtendedBounds ? pieceSize / zoom : 0;
 
     if (isRelative)
@@ -771,15 +772,17 @@ class VirtualCameraRectangle extends FlxSpriteGroup
       var safeRelativeZoom:Float = (relativeZoom != 0) ? relativeZoom : 1.0;
       var zoomFactor:Float = FlxG.camera.zoom / safeRelativeZoom;
       var compensatedScrollX:Float = FlxG.camera.scroll.x * zoomFactor;
+      var compensatedScrollY:Float = FlxG.camera.scroll.y * zoomFactor;
 
-      scaleAmt = ((Math.abs(compensatedScrollX - vcamPoint.x) * 2) + FlxG.width) / safeRelativeZoom;
+      scaleAmtX = ((Math.abs(compensatedScrollX - vcamPoint.x) * 2) + FlxG.width) / safeRelativeZoom;
+      scaleAmtY = ((Math.abs(compensatedScrollY - vcamPoint.y) * 2) + FlxG.height) / safeRelativeZoom;
       extraSize = showExtendedBounds ? pieceSize : 0;
     }
 
-    passeT.setGraphicSize(scaleAmt, scaleAmt);
-    passeB.setGraphicSize(scaleAmt, scaleAmt);
-    passeL.setGraphicSize(scaleAmt, mainView.height);
-    passeR.setGraphicSize(scaleAmt, mainView.height);
+    passeT.setGraphicSize(scaleAmtX, scaleAmtY);
+    passeB.setGraphicSize(scaleAmtX, scaleAmtY);
+    passeL.setGraphicSize(scaleAmtX, mainView.height);
+    passeR.setGraphicSize(scaleAmtX, mainView.height);
 
     passeT.updateHitbox();
     passeB.updateHitbox();
