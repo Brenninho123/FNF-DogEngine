@@ -388,6 +388,33 @@ class Save implements ConsoleClass
   @:saveProperty(data.optionsCameraEditor.hasBackup, false)
   public var cameraEditorHasBackup:SaveProperty<Bool>;
 
+  @:saveProperty(data.optionsCameraEditor.relativeView, false)
+  public var cameraEditorRelativeView:SaveProperty<Bool>;
+
+  @:saveProperty(data.optionsCameraEditor.extendedBounds, false)
+  public var cameraEditorExtendedBounds:SaveProperty<Bool>;
+
+  @:saveProperty(data.optionsCameraEditor.passepartout, false)
+  public var cameraEditorPassepartout:SaveProperty<Bool>;
+
+  @:saveProperty(data.optionsCameraEditor.passepartoutTransparency, 50.0)
+  public var cameraEditorPassepartoutTransparency:SaveProperty<Float>;
+
+  @:saveProperty(data.optionsCameraEditor.bopping, false)
+  public var cameraEditorBopping:SaveProperty<Bool>;
+
+  @:saveProperty(data.optionsCameraEditor.fitCameraToViewport, false)
+  public var cameraEditorFitCameraToViewport:SaveProperty<Bool>;
+
+  @:saveProperty(data.optionsCameraEditor.autoScrollMode, 1)
+  public var cameraEditorAutoScrollMode:SaveProperty<Int>;
+
+  @:saveProperty(data.optionsCameraEditor.snapEnabled, true)
+  public var cameraEditorSnapEnabled:SaveProperty<Bool>;
+
+  @:saveProperty(data.optionsCameraEditor.zoomLevel, 1.0)
+  public var cameraEditorZoomLevel:SaveProperty<Float>;
+
   /// UTIL FUNCITONS
 
   /**
@@ -1602,4 +1629,14 @@ typedef SaveDataCameraEditorOptions =
    * @default `ChartEditorTheme.Light`
    */
   var ?theme:ChartEditorTheme;
+
+  var ?relativeView:Bool;
+  var ?extendedBounds:Bool;
+  var ?passepartout:Bool;
+  var ?passepartoutTransparency:Float;
+  var ?bopping:Bool;
+  var ?fitCameraToViewport:Bool;
+  var ?autoScrollMode:Int;
+  var ?snapEnabled:Bool;
+  var ?zoomLevel:Float;
 }
