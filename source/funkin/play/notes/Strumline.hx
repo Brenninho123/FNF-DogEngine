@@ -606,6 +606,8 @@ class Strumline extends FlxSpriteGroup
       onNoteIncoming.dispatch(noteSprite);
     }
 
+    var quantColorsOn:Bool = Preferences.noteQuantColors;
+
     // Update rendering of notes.
     for (note in notes.members)
     {
@@ -615,6 +617,8 @@ class Strumline extends FlxSpriteGroup
         - INITIAL_OFFSET
         + GRhythmUtil.getNoteY(note.strumTime, scrollSpeed, isDownscroll, conductorInUse)
         + note.yOffset;
+
+      if (quantColorsOn && !note.hasBeenHit) NoteQuantColors.apply(note, true, Conductor.instance.getTimeInSteps(note.strumTime));
 
       // If the note is miss
       var isOffscreen:Bool = isDownscroll ? note.y > FlxG.height : note.y < -note.height;
@@ -628,6 +632,8 @@ class Strumline extends FlxSpriteGroup
     for (holdNote in holdNotes.members)
     {
       if (holdNote == null || !holdNote.alive) continue;
+
+      if (quantColorsOn) NoteQuantColors.apply(holdNote, true, Conductor.instance.getTimeInSteps(holdNote.strumTime), true);
 
       if (conductorInUse.songPosition > holdNote.strumTime && holdNote.hitNote && !holdNote.missedNote)
       {
