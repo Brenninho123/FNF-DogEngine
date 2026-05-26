@@ -45,19 +45,28 @@ class NoteQuantColors
     var c:FlxColor = getQuantColor(stepTime);
     if (flat)
     {
-      var s:NoteQuantTintShader = Std.downcast(sprite.shader, NoteQuantTintShader);
-      if (s == null)
-      {
-        s = new NoteQuantTintShader();
-        sprite.shader = s;
-      }
-      s.setColor(c);
+      sprite.shader = sharedShaderFor(c);
     }
     else
     {
       if (Std.isOfType(sprite.shader, NoteQuantTintShader)) sprite.shader = null;
       sprite.setColorTransform(0.3, 0.3, 0.3, 1, Std.int(c.red * 0.7), Std.int(c.green * 0.7), Std.int(c.blue * 0.7), 0);
     }
+  }
+
+  static var shaderCache:Map<Int, NoteQuantTintShader> = new Map();
+
+  static function sharedShaderFor(c:FlxColor):NoteQuantTintShader
+  {
+    var key:Int = c;
+    var s:Null<NoteQuantTintShader> = shaderCache.get(key);
+    if (s == null)
+    {
+      s = new NoteQuantTintShader();
+      s.setColor(c);
+      shaderCache.set(key, s);
+    }
+    return s;
   }
 
   static inline function alignsTo(stepTime:Float, gridSteps:Float):Bool
