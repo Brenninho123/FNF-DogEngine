@@ -258,8 +258,6 @@ class FreeplayState extends MusicBeatSubState
   var fromCharSelect:Bool = false;
   var forceSkipIntro:Bool = false;
 
-  public var freeplayArrow:Null<FlxText>;
-
   public function new(?params:FreeplayStateParams, ?stickers:StickerSubState)
   {
     var fetchPlayableCharacter = function():PlayableCharacter
@@ -533,15 +531,6 @@ class FreeplayState extends MusicBeatSubState
     topLeftCornerText.font = 'VCR OSD Mono';
     topLeftCornerText.visible = false;
 
-    var freeplayTxtBg:FlxSprite = new FlxSprite().makeGraphic(Math.round(topLeftCornerText.width + 16), Math.round(topLeftCornerText.height + 16),
-      FlxColor.BLACK);
-    freeplayTxtBg.x = topLeftCornerText.x - 8;
-    freeplayTxtBg.visible = false;
-
-    freeplayArrow = new FlxText(Math.max(FullScreenScaleMode.gameNotchSize.x, 8), 8, 0, '<---', 48);
-    freeplayArrow.font = 'VCR OSD Mono';
-    freeplayArrow.visible = false;
-
     ostName.font = 'VCR OSD Mono';
     ostName.alignment = RIGHT;
     ostName.visible = false;
@@ -562,9 +551,7 @@ class FreeplayState extends MusicBeatSubState
       overhangStuff,
       topLeftCornerText,
       ostName,
-      charSelectHint,
-      freeplayTxtBg,
-      freeplayArrow
+      charSelectHint
     ], {
       y: -overhangStuff.height,
       x: 0,
@@ -576,9 +563,7 @@ class FreeplayState extends MusicBeatSubState
       overhangStuff,
       topLeftCornerText,
       ostName,
-      charSelectHint,
-      freeplayTxtBg,
-      freeplayArrow
+      charSelectHint
     ], {
       y: -300,
       speed: 0.8,
@@ -587,7 +572,6 @@ class FreeplayState extends MusicBeatSubState
 
     var sillyStroke:StrokeShader = new StrokeShader(0xFFFFFFFF, 2, 2);
     topLeftCornerText.shader = sillyStroke;
-    freeplayArrow.shader = sillyStroke;
 
     var fnfHighscoreSpr:FlxSprite = new FlxSprite(FlxG.width - (FullScreenScaleMode.gameNotchSize.x + 420), 70);
     fnfHighscoreSpr.frames = Paths.getSparrowAtlas('freeplay/highscore');
@@ -684,8 +668,6 @@ class FreeplayState extends MusicBeatSubState
 
     // putting these here to fix the layering
     add(overhangStuff);
-    add(freeplayArrow);
-    add(freeplayTxtBg);
     add(topLeftCornerText);
     add(ostName);
 
@@ -755,8 +737,6 @@ class FreeplayState extends MusicBeatSubState
       {
         fnfHighscoreSpr.visible = true;
         topLeftCornerText.visible = true;
-        freeplayTxtBg.visible = true;
-        if (freeplayArrow != null) freeplayArrow.visible = true;
         ostName.visible = true;
         updateOSTName(true);
         fpScoreDisplay.visible = true;
