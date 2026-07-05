@@ -90,6 +90,8 @@ class DeselectAllItemsBetweenTimeCommand implements ChartEditorCommand
     state.currentNoteSelection = SongDataUtils.subtractNotes(state.currentNoteSelection, this.notes);
     state.currentEventSelection = SongDataUtils.subtractEvents(state.currentEventSelection, this.events);
 
+    state.refreshToolbox(ChartEditorState.CHART_EDITOR_TOOLBOX_EVENT_DATA_LAYOUT);
+
     state.noteDisplayDirty = true;
     state.notePreviewDirty = true;
   }
@@ -105,6 +107,8 @@ class DeselectAllItemsBetweenTimeCommand implements ChartEditorCommand
     {
       state.currentEventSelection.push(event);
     }
+
+    state.refreshToolbox(ChartEditorState.CHART_EDITOR_TOOLBOX_EVENT_DATA_LAYOUT);
 
     state.noteDisplayDirty = true;
     state.notePreviewDirty = true;
