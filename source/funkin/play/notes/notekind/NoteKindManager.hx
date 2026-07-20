@@ -1,5 +1,6 @@
 package funkin.play.notes.notekind;
 
+import funkin.data.note.SongNoteSchema;
 import funkin.data.song.SongData.SongNoteData;
 import funkin.modding.events.ScriptEventDispatcher;
 import funkin.modding.events.ScriptEvent;
@@ -7,7 +8,6 @@ import funkin.ui.debug.charting.util.ChartEditorDropdowns;
 import funkin.data.notestyle.NoteStyleRegistry;
 import funkin.play.notes.notestyle.NoteStyle;
 import funkin.play.notes.notekind.ScriptedNoteKind;
-import funkin.play.notes.notekind.NoteKind.NoteKindParam;
 import funkin.util.macro.ClassMacro;
 
 class NoteKindManager
@@ -201,16 +201,11 @@ class NoteKindManager
   /**
    * Retrive custom params of the given note kind
    * @param noteKind Name of the note kind
-   * @return Array<NoteKindParam>
+   * @return Null<SongNoteSchema>
    */
-  public static function getParams(noteKind:Null<String>):Array<NoteKindParam>
+  public static function getNoteSchema(noteKind:Null<String>):Null<SongNoteSchema>
   {
-    if (noteKind == null)
-    {
-      return [];
-    }
-
-    return noteKinds.get(noteKind)?.params ?? [];
+    return noteKinds.get(noteKind)?.getNoteSchema();
   }
 
   /**
