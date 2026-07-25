@@ -496,6 +496,8 @@ class OffsetMenu extends Page<OptionsState.OptionsMenuPageName>
 
   override function update(elapsed:Float):Void
   {
+    PreciseInputManager.instance.updateFrameTimestamp();
+
     super.update(elapsed);
     localConductor.update(localConductor.songPosition + elapsed * 1000, false);
 
@@ -813,10 +815,10 @@ class OffsetMenu extends Page<OptionsState.OptionsMenuPageName>
 
   function hitNote(note:NoteSprite, input:PreciseInputEvent):Void
   {
-    var inputLatencyNs:Int64 = PreciseInputManager.getCurrentTimestamp() - input.timestamp;
+    var inputLatencyNs:Int64 = PreciseInputManager.instance.currentFrameTimestamp - input.timestamp;
     var inputLatencyMs:Float = inputLatencyNs.toFloat() / Constants.NS_PER_MS;
 
-    var noteDiff:Int = Std.int(note.noteData.time - localConductor.songPosition - inputLatencyMs);
+    var noteDiff:Int = Std.int(localConductor.songPosition - inputLatencyMs - note.noteData.time);
 
     addDifference(noteDiff);
 
