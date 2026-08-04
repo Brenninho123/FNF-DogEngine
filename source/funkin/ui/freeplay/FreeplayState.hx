@@ -1662,7 +1662,7 @@ class FreeplayState extends MusicBeatSubState
   function transitionToCharSelect():Void
   {
     var transitionGradient:FlxSprite = new FlxSprite(0, 720).loadGraphic(Paths.image('ui/freeplay/interface/transition-gradient'));
-    transitionGradient.scale.set(1280, 1);
+    transitionGradient.scale.set(FlxG.width, 1);
     transitionGradient.updateHitbox();
     transitionGradient.cameras = [rankCamera];
     exitMoversCharSel.set([transitionGradient], {
@@ -1743,7 +1743,7 @@ class FreeplayState extends MusicBeatSubState
     if (_parentState != null) _parentState.persistentDraw = false;
 
     var transitionGradient = new FlxSprite(0, 720).loadGraphic(Paths.image('ui/freeplay/interface/transition-gradient'));
-    transitionGradient.scale.set(1280, 1);
+    transitionGradient.scale.set(FlxG.width, 1);
     transitionGradient.updateHitbox();
     transitionGradient.cameras = [rankCamera];
     exitMoversCharSel.set([transitionGradient], {
