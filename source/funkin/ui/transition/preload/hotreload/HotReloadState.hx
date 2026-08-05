@@ -225,9 +225,6 @@ class HotReloadState extends MusicBeatState
       loadAdditionalData();
 
       initModules();
-
-      // Move to the title state next frame.
-      isComplete = true;
     });
   }
 
@@ -248,8 +245,17 @@ class HotReloadState extends MusicBeatState
    */
   function initModules():Void
   {
-    ModuleHandler.loadModuleCache();
-    ModuleHandler.callOnCreate();
+    var future:Future<LoadEntriesResult> = ModuleHandler.loadModuleCacheAsync();
+
+    future.onComplete((result:LoadEntriesResult) ->
+    {
+      // Call create() on each module when the future is complte.
+      ModuleHandler.callOnCreate();
+
+      // Move to the title state next frame.
+      // Modules are the last thing loaded so this must come after their future is completed.
+      isComplete = true;
+    });
   }
 
   /**
