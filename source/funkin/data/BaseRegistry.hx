@@ -164,9 +164,8 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
 
       if (entry != null)
       {
+        onScriptedEntryLoaded(entryCls, entry);
         log('Instantiated scripted entry (${entryCls} = ${entry.id})');
-        entries.set(entry.id, entry);
-        scriptedEntryIds.set(entry.id, entryCls);
       }
       else
       {
@@ -190,8 +189,8 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
         var entry:Null<T> = createEntry(entryId);
         if (entry != null)
         {
+          onUnscriptedEntryLoaded(entry);
           log('Instantiated unscripted entry (${entry.id})');
-          entries.set(entry.id, entry);
         }
       }
       catch (e)
@@ -203,6 +202,25 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
     }
 
     perf.print();
+  }
+
+  /**
+   * Called when a scripted entry has been successfully loaded.
+   * @param entry The entry that was loaded.
+   */
+  function onScriptedEntryLoaded(clsName:String, entry:T):Void
+  {
+    entries.set(entry.id, entry);
+    scriptedEntryIds.set(entry.id, clsName);
+  }
+
+  /**
+   * Called when an unscripted entry has been successfully loaded.
+   * @param entry The entry that was loaded.
+   */
+  function onUnscriptedEntryLoaded(entry:T):Void
+  {
+    entries.set(entry.id, entry);
   }
 
   #if FEATURE_MULTITHREADING
@@ -245,21 +263,21 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
     // When the last task completes, we can complete the promise.
     var checkComplete:Void->Void = () ->
     {
-      var completedCount = entries.size() + entryErrors.length;
+      var completedCount = countEntries() + entryErrors.length;
       if (completedCount == entryCount)
       {
         if (!doneScriptedEntries)
         {
           doneScriptedEntries = true;
           startUnscriptedEntries();
-          log('Finished loading entries (1/2) (${entries.size()}+${entryErrors.length} / ${entryCount})');
+          log('Finished loading entries (1/2) ($completedCount / ${entryCount})');
           return;
         }
         else
         {
-          log('Finished loading entries (2/2) (${entries.size()}+${entryErrors.length} / ${entryCount})');
+          log('Finished loading entries (2/2) ($completedCount / ${entryCount})');
           promise.complete({
-            entriesLoaded: entries.size(),
+            entriesLoaded: countEntries(),
             entriesFailed: entryErrors.length
           });
           perf.print();
@@ -278,7 +296,7 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
             log('  Unfinished: ${unfinishedEntries.join(', ')}')
             log('  Scripted (${scriptedEntryIds.length}): ${scriptedEntryClassNames.join(', ')}')
             log('  Unscripted (${unscriptedEntryIds.length}): ${unscriptedEntryIds.join(', ')}')
-            log('  Entries (${entries.size()}): ${entries.keys().array().join(', ')}')
+            log('  Entries (${countEntries()}): ${entries.keys().array().join(', ')}')
            */
         }
       }
@@ -297,23 +315,21 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
       };
 
     // Callback when one task completes with success
-    var onScriptedEntryLoaded:(String,
+    var onScriptedEntryLoadedAsync:(String,
       {entry:T, entryCls:String}) -> Void = (_, state) ->
       {
-        var entryId:String = state.entry.id;
-        entries.set(entryId, state.entry);
-        scriptedEntryIds.set(entryId, state.entryCls);
+        onScriptedEntryLoaded(state.entryCls, state.entry);
 
-        log('  Loaded scripted entry: ${entryId} (${state.entryCls}) (${entries.size()}+${entryErrors.length}/${entryCount})');
+        log('  Loaded scripted entry: ${state.entry.id} (${state.entryCls}) (${countEntries()}+${entryErrors.length}/${entryCount})');
         checkComplete();
       };
 
     // Callback when one task completes with success
-    var onUnscriptedEntryLoaded:(String,
+    var onUnscriptedEntryLoadedAsync:(String,
       {entry:T}) -> Void = (entryId, state) ->
       {
-        entries.set(entryId, state.entry);
-        log('  Loaded unscripted entry: ${entryId} (${entries.size()}+${entryErrors.length}/${entryCount})');
+        onUnscriptedEntryLoaded(state.entry);
+        log('  Loaded unscripted entry: ${entryId} (${countEntries()}+${entryErrors.length}/${entryCount})');
         checkComplete();
       };
 
@@ -425,7 +441,7 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
                     onStart: (_) -> {
                     },
                     onError: onError.bind(entryCls),
-                    onComplete: onScriptedEntryLoaded.bind(entryCls)
+                    onComplete: onScriptedEntryLoadedAsync.bind(entryCls)
                   }
                 });
               }
@@ -445,7 +461,7 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
           // then queue the tasks on the main thread in onComplete,
           // because you can't add tasks from another thread.
           var entryIdList:Array<String> = fetchEntryIdsFromFiles();
-          log('  Found ${entryIdList.length} entry files, ${entries.size()} entries already loaded...');
+          log('  Found ${entryIdList.length} entry files, ${countEntries()} entries already loaded...');
           unscriptedEntryIds = entryIdList.filter((entryId) ->
           {
             return !entries.exists(entryId);
@@ -480,7 +496,7 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
                     onStart: (_) -> {
                     },
                     onError: onError.bind(entryId),
-                    onComplete: onUnscriptedEntryLoaded.bind(entryId)
+                    onComplete: onUnscriptedEntryLoadedAsync.bind(entryId)
                   }
                 });
               }
