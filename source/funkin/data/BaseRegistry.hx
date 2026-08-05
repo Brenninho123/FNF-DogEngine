@@ -165,7 +165,6 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
       if (entry != null)
       {
         onScriptedEntryLoaded(entryCls, entry);
-        log('Instantiated scripted entry (${entryCls} = ${entry.id})');
       }
       else
       {
@@ -190,7 +189,6 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
         if (entry != null)
         {
           onUnscriptedEntryLoaded(entry);
-          log('Instantiated unscripted entry (${entry.id})');
         }
       }
       catch (e)
@@ -212,6 +210,7 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
   {
     entries.set(entry.id, entry);
     scriptedEntryIds.set(entry.id, clsName);
+    log('Instantiated scripted entry (${clsName} = ${entry.id})');
   }
 
   /**
@@ -221,6 +220,7 @@ abstract class BaseRegistry<T:(IRegistryEntry<J> & Constructible<EntryConstructo
   function onUnscriptedEntryLoaded(entry:T):Void
   {
     entries.set(entry.id, entry);
+    log('Instantiated unscripted entry (${entry.id})');
   }
 
   #if FEATURE_MULTITHREADING
