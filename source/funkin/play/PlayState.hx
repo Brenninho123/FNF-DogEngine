@@ -1346,28 +1346,21 @@ class PlayState extends MusicBeatSubState
      * Pause the game.
      * @param mode Which set of pause menu options to display (distinguishes between standard, charting, and cutscene)
      * @param lostFocus Whether the game paused because the window lost focus
+     * @param onPause Callback to run when finished initializing.
      */
-  function pause(mode:PauseMode = Standard, lostFocus:Bool = false):Void
+  function pause(mode:PauseMode = Standard, lostFocus:Bool = false, ?onPause:Void->Void):Void
   {
     if (!mayPauseGame || justUnpaused || isGamePaused || isPlayerDying || isSongEnd) return;
 
     switch (mode)
     {
-      case Conversation:
+      case Cutscene(entryName, pauseName, onResume, onSkip, onRestart):
         preparePauseUI();
 
         final event = new PauseScriptEvent(false);
         dispatchEvent(event);
 
-        if (!event.eventCanceled) openPauseSubState(Conversation, camPause, lostFocus, () -> currentConversation?.pause());
-
-      case Cutscene:
-        preparePauseUI();
-
-        final event = new PauseScriptEvent(false);
-        dispatchEvent(event);
-
-        if (!event.eventCanceled) openPauseSubState(Cutscene, camPause, lostFocus, () -> VideoCutscene.pauseVideo());
+        if (!event.eventCanceled) openPauseSubState(mode, camPause, lostFocus, onPause);
 
       default: // also known as standard
         if (!isInCountdown || isInCutscene) return;
@@ -1796,11 +1789,13 @@ class PlayState extends MusicBeatSubState
     {
       if (currentConversation != null)
       {
-        pause(Conversation, true);
+        pause(Cutscene('Conversation', 'Conversation', null, currentConversation?.skipConversation, currentConversation?.resetConversation), true,
+          currentConversation.pauseMusic);
       }
       else if (VideoCutscene.isPlaying())
       {
-        pause(Cutscene, true);
+        pause(Cutscene('Cutscene', 'Video', VideoCutscene.resumeVideo, VideoCutscene.finishVideo.bind(null), VideoCutscene.restartVideo), true,
+          VideoCutscene.pauseVideo);
       }
       else
       {
@@ -3409,7 +3404,8 @@ class PlayState extends MusicBeatSubState
       }
       else if ((controls.PAUSE_P || androidPause || pauseButtonCheck) && !justUnpaused)
       {
-        pause(Conversation);
+        pause(Cutscene('Conversation', 'Conversation', null, currentConversation?.skipConversation, currentConversation?.resetConversation),
+          currentConversation.pauseMusic);
       }
     }
     else if (VideoCutscene.isPlaying())
@@ -3417,7 +3413,8 @@ class PlayState extends MusicBeatSubState
       // This is a video cutscene.
       if ((controls.PAUSE_P || androidPause || pauseButtonCheck) && !justUnpaused)
       {
-        pause(Cutscene);
+        pause(Cutscene('Cutscene', 'Video', VideoCutscene.resumeVideo, VideoCutscene.finishVideo.bind(null), VideoCutscene.restartVideo),
+          VideoCutscene.pauseVideo);
       }
     }
   }
