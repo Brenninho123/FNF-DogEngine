@@ -3,6 +3,7 @@ package funkin.ui.debug.charting.commands;
 #if FEATURE_CHART_EDITOR
 import funkin.data.song.SongData.SongTimeChange;
 import funkin.ui.debug.charting.toolboxes.ChartEditorMetadataToolbox;
+import funkin.data.song.SongDataUtils;
 
 /**
  * A command which adds a new timechange to the current song's timechanges, after the index value given, at the given timestamp.
@@ -40,9 +41,6 @@ class AddNewTimeChangeCommand implements ChartEditorCommand
 
     state.currentSongMetadata.timeChanges = timeChanges;
 
-    state.noteDisplayDirty = true;
-    state.notePreviewDirty = true;
-    state.notePreviewViewportBoundsDirty = true;
     state.scrollPositionInPixels = 0;
 
     var metadataToolbox:ChartEditorMetadataToolbox = cast state.getToolbox(ChartEditorState.CHART_EDITOR_TOOLBOX_METADATA_LAYOUT);
@@ -54,6 +52,8 @@ class AddNewTimeChangeCommand implements ChartEditorCommand
     state.updateSongTime(); // basically will update the time signature for the editor if necessary.
     state.updateGridHeight();
     state.updateTimeSignature();
+    state.currentSongChartNoteData = SongDataUtils.offsetSongNoteData(state.currentSongChartNoteData, 0);
+    state.currentSongChartEventData = SongDataUtils.offsetSongEventData(state.currentSongChartEventData, 0);
   }
 
   public function undo(state:ChartEditorState):Void
@@ -65,9 +65,6 @@ class AddNewTimeChangeCommand implements ChartEditorCommand
 
     state.currentSongMetadata.timeChanges = previousTimeChanges;
 
-    state.noteDisplayDirty = true;
-    state.notePreviewDirty = true;
-    state.notePreviewViewportBoundsDirty = true;
     state.scrollPositionInPixels = 0;
 
     var metadataToolbox:ChartEditorMetadataToolbox = cast state.getToolbox(ChartEditorState.CHART_EDITOR_TOOLBOX_METADATA_LAYOUT);
@@ -79,6 +76,8 @@ class AddNewTimeChangeCommand implements ChartEditorCommand
     state.updateSongTime();
     state.updateGridHeight();
     state.updateTimeSignature();
+    state.currentSongChartNoteData = SongDataUtils.offsetSongNoteData(state.currentSongChartNoteData, 0);
+    state.currentSongChartEventData = SongDataUtils.offsetSongEventData(state.currentSongChartEventData, 0);
   }
 
   public function shouldAddToHistory(state:ChartEditorState):Bool
