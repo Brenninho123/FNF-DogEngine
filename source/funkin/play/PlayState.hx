@@ -1227,9 +1227,10 @@ class PlayState extends MusicBeatSubState
       camHUD.zoom = FlxMath.lerp(defaultHUDCameraZoom, camHUD.zoom, Math.pow(decayRate, dt));
     }
 
-    if (currentStage != null && currentStage.getBoyfriend() != null)
+    var bf:Null<BaseCharacter> = currentStage?.getBoyfriend();
+    if (bf != null)
     {
-      FlxG.watch.addQuick('bfAnim', currentStage.getBoyfriend().getCurrentAnimation());
+      FlxG.watch.addQuick('bfAnim', bf.getCurrentAnimation());
     }
     FlxG.watch.addQuick('health', health);
     FlxG.watch.addQuick('cameraBopIntensity', cameraBopIntensity);
@@ -1390,14 +1391,6 @@ class PlayState extends MusicBeatSubState
           }
           else
           {
-            var boyfriendPos:FlxPoint = new FlxPoint(0, 0);
-
-            // Prevent the game from crashing if Boyfriend isn't present.
-            if (currentStage != null && currentStage.getBoyfriend() != null)
-            {
-              boyfriendPos = currentStage.getBoyfriend().getScreenPosition();
-            }
-
             openPauseSubState(isChartingMode ? Charting : Standard, camPause, lostFocus);
           }
 
@@ -2845,9 +2838,10 @@ class PlayState extends MusicBeatSubState
       if (holdNote.hitNote && !holdNote.missedNote && holdNote.sustainLength > 0)
       {
         // Make sure the opponent keeps singing while the note is held.
-        if (currentStage != null && currentStage.getDad() != null && currentStage.getDad().isSinging())
+        var dad:Null<BaseCharacter> = currentStage?.getDad();
+        if (dad != null && dad.isSinging())
         {
-          currentStage.getDad().holdTimer = 0;
+          dad.holdTimer = 0;
         }
       }
 
@@ -2860,7 +2854,7 @@ class PlayState extends MusicBeatSubState
         {
           // We dropped a hold note.
           // Play miss animation, but don't penalize.
-          if (currentStage != null) currentStage.getOpponent().playSingAnimation(holdNote.noteData.getDirection(), true);
+          currentStage?.getOpponent()?.playSingAnimation(holdNote.noteData.getDirection(), true);
         }
       }
     }
@@ -2936,9 +2930,10 @@ class PlayState extends MusicBeatSubState
         }
 
         // Make sure the player keeps singing while the note is held by the bot.
-        if (isBotPlayMode && currentStage != null && currentStage.getBoyfriend() != null && currentStage.getBoyfriend().isSinging())
+        var bf:Null<BaseCharacter> = currentStage?.getBoyfriend();
+        if (isBotPlayMode && bf != null && bf.isSinging())
         {
-          currentStage.getBoyfriend().holdTimer = 0;
+          bf.holdTimer = 0;
         }
       }
 
