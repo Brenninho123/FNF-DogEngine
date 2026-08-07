@@ -106,6 +106,11 @@ class FunkinPreloader extends FlxBasePreloader
 
   public function new()
   {
+    #if (cpp && windows)
+    // Enable dark mode support for the title bar.
+    funkin.util.WindowUtil.setWindowDarkMode(true, true);
+    #end
+
     super(Constants.PRELOADER_MIN_STAGE_TIME);
 
     trace(' PRELOADER '.bold().bg_note_left() + ' Starting custom preloader...');
