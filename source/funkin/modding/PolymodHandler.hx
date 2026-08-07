@@ -274,6 +274,12 @@ class PolymodHandler
     Polymod.addImportAlias('lime.utils.Assets', funkin.Assets);
     Polymod.addImportAlias('openfl.utils.Assets', funkin.Assets);
 
+    /**
+     * Using the `AssetManifest` class can get you a `Future` that holds an `AssetLibrary`
+     * that you can then use to resolve to blacklisted classes using the `classTypes` field.
+    **/
+    Polymod.blacklistInstanceFields('lime.utils.AssetLibrary', ['classTypes']);
+
     // Backward compatibility for certain scripted classes outside `funkin.modding.base`.
     Polymod.addImportAlias('funkin.modding.base.ScriptedFunkinSprite', funkin.graphics.ScriptedFunkinSprite);
     Polymod.addImportAlias('funkin.modding.base.ScriptedMusicBeatState', funkin.ui.ScriptedMusicBeatState);
@@ -331,7 +337,7 @@ class PolymodHandler
     // `haxe.Http`
     // An alias for `sys.Http`, which is also a blacklisted package.
     Polymod.blacklistImport('haxe.Http');
-    
+
     // `haxe.Unserializer`
     // Unserializer.DEFAULT_RESOLVER.resolveClass() can access blacklisted packages
     Polymod.blacklistImport('haxe.Unserializer');
