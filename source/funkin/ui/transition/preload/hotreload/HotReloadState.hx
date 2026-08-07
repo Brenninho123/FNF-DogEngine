@@ -199,6 +199,7 @@ class HotReloadState extends MusicBeatState
   {
     var futures:Array<Future<LoadEntriesResult>> = [];
 
+    futures.push(SongRegistry.instance.loadEntriesAsync());
     futures.push(LevelRegistry.instance.loadEntriesAsync());
     futures.push(NoteStyleRegistry.instance.loadEntriesAsync());
     futures.push(PlayerRegistry.instance.loadEntriesAsync());
@@ -242,7 +243,6 @@ class HotReloadState extends MusicBeatState
   function loadAdditionalData():Void
   {
     SongEventRegistry.loadEventCache();
-    SongRegistry.instance.loadEntries();
     CharacterDataParser.loadCharacterCache();
     NoteKindManager.initialize();
   }
