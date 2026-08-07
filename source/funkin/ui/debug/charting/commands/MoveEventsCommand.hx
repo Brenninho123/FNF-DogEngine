@@ -51,7 +51,7 @@ class MoveEventsCommand implements ChartEditorCommand
     state.currentSongChartEventData = state.currentSongChartEventData.concat(movedEvents);
     state.currentEventSelection = movedEvents;
 
-    state.playSound(Paths.sound('chartingSounds/noteLay'));
+    state.playSound(Paths.sound('chartingSounds/noteLay'), 1.0, 1.0, 0.1);
 
     state.saveDataDirty = true;
     state.noteDisplayDirty = true;
