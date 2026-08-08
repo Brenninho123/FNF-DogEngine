@@ -47,8 +47,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Install lime and openfl
-        run: |
-          haxelib run lime setup -y
+        run: yes | haxelib run lime setup -y
 
       - name: Set ANDROID_NDK_ROOT
         run: echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/25.2.9519653" >> $GITHUB_ENV
