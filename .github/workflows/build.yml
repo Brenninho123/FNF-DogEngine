@@ -46,6 +46,12 @@ jobs:
           haxelib install hmm --quiet
           haxelib run hmm install --quiet
 
+      - name: Init submodules for lime dependency
+        run: |
+          LIME_PATH=$(haxelib libpath lime)
+          cd "$LIME_PATH"
+          git submodule update --init --recursive
+
       - name: Build hxcpp command-line tool
         run: |
           HXCPP_PATH=$(haxelib libpath hxcpp)
