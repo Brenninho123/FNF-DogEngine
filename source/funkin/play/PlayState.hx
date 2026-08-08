@@ -2575,7 +2575,12 @@ class PlayState extends MusicBeatSubState
     Highscore.tallies = new Tallies();
 
     @:nullSafety(Off)
-    var event:SongLoadScriptEvent = SongLoadScriptEvent.get(currentChart.song.id, currentChart.difficulty, currentChart.notes.copy(), currentChart.getEvents());
+    var event:SongLoadScriptEvent = SongLoadScriptEvent.get(
+      currentChart.song.id,
+      currentChart.difficulty,
+      currentChart.notes.copy(),
+      currentChart.getEvents()
+    );
 
     dispatchEvent(event);
     event.put();
@@ -3209,8 +3214,16 @@ class PlayState extends MusicBeatSubState
     }
 
     // Send the note hit event.
-    var event:HitNoteScriptEvent = HitNoteScriptEvent.get(note, healthChange, score, daRating, isComboBreak,
-      note.scoreable ? Highscore.tallies.combo + 1 : Highscore.tallies.combo, noteDiff, daRating == 'sick');
+    var event:HitNoteScriptEvent = HitNoteScriptEvent.get(
+      note,
+      healthChange,
+      score,
+      daRating,
+      isComboBreak,
+      note.scoreable ? Highscore.tallies.combo + 1 : Highscore.tallies.combo,
+      noteDiff,
+      daRating == 'sick'
+    );
     dispatchEvent(event);
     event.put();
 

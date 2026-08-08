@@ -3,7 +3,6 @@ package funkin.play;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.modding.events.ScriptEvent;
-import funkin.modding.events.ScriptEventDispatcher;
 import funkin.modding.events.ScriptEventType;
 import funkin.modding.events.ScriptEvent.CountdownScriptEvent;
 import flixel.util.FlxTimer;
@@ -119,7 +118,7 @@ class Countdown
         ScriptEventType.COUNTDOWN_STEP;
     }
 
-    var event:CountdownScriptEvent = CountdownScriptEvent.get(COUNTDOWN_START, index, (index != AFTER));
+    var event:CountdownScriptEvent = CountdownScriptEvent.get(type, index, (index != AFTER));
 
     // Modules, stages, characters.
     @:privateAccess

@@ -2561,11 +2561,6 @@ class FreeplayState extends MusicBeatSubState
           persist: true
         });
         if (FlxG.sound.music != null) FlxG.sound.music.fadeIn(4.0, 0.0, 1.0);
-
-        var event:FreeplayScriptEvent = FreeplayScriptEvent.get(FREEPLAY_CLOSE);
-        dispatchEvent(event);
-        event.put();
-
         close();
       }
       else

@@ -1178,10 +1178,6 @@ class CharSelectSubState extends MusicBeatSubState
     else
       staticSound.stop();
 
-    var event:CharacterSelectScriptEvent = CharacterSelectScriptEvent.get(CHARACTER_SELECTED, value);
-    dispatchEvent(event);
-    event.put();
-
     nametag.switchChar(value);
 
     gfChill.visible = false;
