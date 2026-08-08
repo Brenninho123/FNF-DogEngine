@@ -52,8 +52,8 @@ jobs:
           cd "$HXCPP_PATH/tools/hxcpp"
           haxe compile.hxml
 
-      - name: Install lime and openfl
-        run: haxelib run lime setup -y
+      - name: Install lime and openfl (Android only)
+        run: haxelib run lime setup android -y
 
       - name: Set ANDROID_NDK_ROOT
         run: echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/25.2.9519653" >> $GITHUB_ENV
