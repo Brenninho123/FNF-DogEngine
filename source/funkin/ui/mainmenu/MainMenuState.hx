@@ -32,9 +32,6 @@ import funkin.util.WindowUtil;
 import funkin.mobile.ui.FunkinButton;
 import funkin.util.MathUtil;
 import funkin.util.TouchUtil;
-import funkin.api.newgrounds.Referral;
-import funkin.ui.mainmenu.UpgradeSparkle;
-import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 #if FEATURE_DISCORD_RPC
 import funkin.api.discord.DiscordClient;
 #end
@@ -43,7 +40,6 @@ import funkin.api.newgrounds.NewgroundsClient;
 #end
 #if mobile
 import funkin.mobile.input.ControlsHandler;
-import funkin.mobile.util.InAppPurchasesUtil;
 #end
 
 @:nullSafety
@@ -70,24 +66,16 @@ class MainMenuState extends MusicBeatState
 
   static var rememberedSelectedIndex:Int = 0;
 
-  // this should never be false on non-mobile targets.
-  var hasUpgraded:Bool = false;
-  var upgradeSparkles:FlxTypedSpriteGroup<UpgradeSparkle>;
-
   public function new(_overrideMusic:Bool = false)
   {
     super();
     overrideMusic = _overrideMusic;
 
-    // Start in Entering state during screen fade in
     uiStateMachine.transition(EnteringMainMenu);
 
-    upgradeSparkles = new FlxTypedSpriteGroup<UpgradeSparkle>();
     magenta = new FlxSprite(Paths.image('menuBGMagenta'));
     camFollow = new FlxObject(0, 0, 1, 1);
 
-    // TODO: enabling and disabling keys is a lil quirky,
-    // we should move towards unifying the UI and it's inputs into this UIStateMachine managed system
     FlxG.keys.enabled = true;
   }
 
@@ -102,24 +90,13 @@ class MainMenuState extends MusicBeatState
     transIn = FlxTransitionableState.defaultTransIn;
     transOut = FlxTransitionableState.defaultTransOut;
 
-    #if FEATURE_MOBILE_IAP
-    trace("hasInitialized: " + InAppPurchasesUtil.hasInitialized);
-    if (InAppPurchasesUtil.hasInitialized) Preferences.noAds = InAppPurchasesUtil.isPurchased(InAppPurchasesUtil.UPGRADE_PRODUCT_ID);
-    // If the user is faster than their shit wifi, it gets the saved noAds instead.
-    hasUpgraded = Preferences.noAds;
-    #else
-    // just to make sure its never accidentally turned off
-    hasUpgraded = true;
-    #end
-
     if (!overrideMusic) playMenuMusic();
 
-    // We want the state to always be able to begin with being able to accept inputs and show the anims of the menu items.
     persistentUpdate = true;
     persistentDraw = true;
 
     bg = new FlxSprite(Paths.image('menuBG'));
-    bg.scrollFactor.x = #if !mobile 0 #else 0.17 #end; // we want a lil x scroll on mobile
+    bg.scrollFactor.x = #if !mobile 0 #else 0.17 #end;
     bg.scrollFactor.y = 0.17;
     bg.setGraphicSize(Std.int(FlxG.width * 1.2));
     bg.updateHitbox();
@@ -164,55 +141,21 @@ class MainMenuState extends MusicBeatState
       persistentDraw = true;
       persistentUpdate = false;
       rememberedSelectedIndex = menuItems?.selectedIndex ?? 0;
-      // Freeplay has its own custom transition
       FlxTransitionableState.skipNextTransIn = true;
       FlxTransitionableState.skipNextTransOut = true;
 
-      // Since CUTOUT_WIDTH is static it might retain some old inccrect values so we update it before loading freeplay
       FreeplayState.CUTOUT_WIDTH = funkin.ui.FullScreenScaleMode.gameCutoutSize.x / 1.5;
 
       #if FEATURE_DEBUG_FUNCTIONS
-      // Debug function: Hold SHIFT when selecting Freeplay to swap character without the char select menu
       var targetCharacter:Null<String> = FlxG.keys.pressed.SHIFT ? (FreeplayState.rememberedCharacterId == "pico" ? "bf" : "pico") : FreeplayState.rememberedCharacterId;
       #else
       var targetCharacter:Null<String> = FreeplayState.rememberedCharacterId;
       #end
 
-      if (!hasUpgraded)
-      {
-        for (i in 0...upgradeSparkles.length)
-        {
-          upgradeSparkles.members[i].cancelSparkle();
-        }
-      }
-
       openSubState(new FreeplayState({
         character: targetCharacter
       }));
     });
-
-    if (hasUpgraded)
-    {
-      #if FEATURE_OPEN_URL
-      // In order to prevent popup blockers from triggering,
-      // we need to open the link as an immediate result of a keypress event,
-      // so we can't wait for the flicker animation to complete.
-      var hasPopupBlocker:Bool = #if web true #else false #end;
-      createMenuItem('merch', 'mainmenu/merch', selectMerch, hasPopupBlocker);
-      #end
-    }
-    else
-    {
-      add(upgradeSparkles);
-
-      createMenuItem('upgrade', 'mainmenu/upgrade', function()
-      {
-        #if FEATURE_MOBILE_IAP
-        InAppPurchasesUtil.purchase(InAppPurchasesUtil.UPGRADE_PRODUCT_ID, FlxG.resetState);
-        uiStateMachine.transition(Idle);
-        #end
-      });
-    }
 
     if (#if mobile ControlsHandler.usingExternalInputDevice #else true #end)
     {
@@ -227,7 +170,6 @@ class MainMenuState extends MusicBeatState
       startExitState(() -> new funkin.ui.credits.CreditsState());
     });
 
-    // Reset position of menu items.
     final spacing:Float = 160;
     final top:Float = (FlxG.height - (spacing * (menuItems.length - 1))) / 2;
 
@@ -235,8 +177,7 @@ class MainMenuState extends MusicBeatState
     {
       menuItem.x = FlxG.width / 2;
       menuItem.y = top + spacing * index;
-      menuItem.scrollFactor.x = #if !mobile 0.0 #else 0.4 #end; // we want a lil scroll on mobile, for the cute gyro effect
-      // This one affects how much the menu items move when you scroll between them.
+      menuItem.scrollFactor.x = #if !mobile 0.0 #else 0.4 #end;
       menuItem.scrollFactor.y = 0.4;
 
       if (index == 1) camFollow.setPosition(menuItem.getGraphicMidpoint().x, menuItem.getGraphicMidpoint().y);
@@ -244,32 +185,8 @@ class MainMenuState extends MusicBeatState
 
     menuItems.selectItem(rememberedSelectedIndex);
 
-    if (!hasUpgraded)
-    {
-      // the upgrade item
-      var targetItem = menuItems.members[2];
-      for (_ in 0...8)
-      {
-        var sparkle:UpgradeSparkle = new UpgradeSparkle(targetItem.x - (targetItem.width / 2), targetItem.y - (targetItem.height / 2), targetItem.width,
-          targetItem.height, FlxG.random.bool(80));
-        upgradeSparkles.add(sparkle);
-
-        sparkle.scrollFactor.x = 0.0;
-        sparkle.scrollFactor.y = 0.4;
-      }
-
-      subStateClosed.add(_ ->
-      {
-        for (i in 0...upgradeSparkles.length)
-        {
-          upgradeSparkles.members[i].restartSparkle();
-        }
-      });
-    }
-
     resetCamStuff();
 
-    // reset camera when debug menu is closed
     subStateClosed.add(_ -> resetCamStuff(false));
 
     subStateOpened.add((sub:FlxSubState) ->
@@ -283,14 +200,11 @@ class MainMenuState extends MusicBeatState
       }
     });
 
-    // FlxG.camera.setScrollBounds(bg.x, bg.x + bg.width, bg.y, bg.y + bg.height * 1.2);
-
     #if mobile
     gyroPan = new FlxPoint();
 
     camFollow.y = bg.getGraphicMidpoint().y;
 
-    // TODO: This is absolutely disgusting but what the hell sure, fix it later -Zack
     addBackButton(FlxG.width - 230, FlxG.height - 200, FlxColor.WHITE, goBack, 1.0);
 
     if (!ControlsHandler.usingExternalInputDevice)
@@ -301,19 +215,16 @@ class MainMenuState extends MusicBeatState
     backButton?.onConfirmStart.add(() ->
     {
       uiStateMachine.transition(Interacting);
-      trace('BACK: Interact Start');
     });
 
     optionsButton?.onConfirmStart.add(() ->
     {
       uiStateMachine.transition(Interacting);
-      trace('OPTIONS: Interact Start');
     });
     #end
 
     super.create();
 
-    // This has to come AFTER!
     initLeftWatermarkText();
   }
 
@@ -321,7 +232,7 @@ class MainMenuState extends MusicBeatState
   {
     if (leftWatermarkText == null) return;
 
-    leftWatermarkText.text = Constants.VERSION;
+    leftWatermarkText.text = "DogEngine 0.0.1";
 
     #if FEATURE_NEWGROUNDS
     if (NewgroundsClient.instance.isLoggedIn())
@@ -336,7 +247,6 @@ class MainMenuState extends MusicBeatState
     FunkinSound.playMusic('freakyMenu', {
       overrideExisting: true,
       restartTrack: false,
-      // Continue playing this music between states, until a different music track gets played.
       persist: true
     });
   }
@@ -357,7 +267,6 @@ class MainMenuState extends MusicBeatState
     item.ID = menuItems.length;
     item.scrollFactor.set();
 
-    // Set the offset of the item so the sprite is centered on the origin.
     item.centered = true;
     item.changeAnim('idle');
     menuItems.addItem(name, item);
@@ -377,16 +286,11 @@ class MainMenuState extends MusicBeatState
   {
     magenta.visible = false;
 
-    // when we are in Transition (fade in on new FlxState) we don't really care about substate closing
-    // this fixes issue when Entering w/ fade -> interacting -> fade ends, so it transitions to Idle on our substate end here
     if (!(subState is flixel.addons.transition.Transition))
     {
       uiStateMachine.transition(Idle);
 
       #if FEATURE_TOUCH_CONTROLS
-      // we want to reset our backButton + optionsButton if we are returning to the main menu from a substate like freeplay
-      // however, we dont want to trigger these resets if we are entering the state
-
       backButton?.animation.play('idle');
       backButton?.resetCallbacks();
 
@@ -409,12 +313,6 @@ class MainMenuState extends MusicBeatState
   {
     WindowUtil.openURL(Constants.URL_ITCH);
   }
-
-  function selectMerch()
-  {
-    Referral.doMerchReferral();
-    uiStateMachine.transition(Idle);
-  }
   #end
 
   public function openPrompt(prompt:Prompt, onClose:Void->Void):Void
@@ -424,7 +322,6 @@ class MainMenuState extends MusicBeatState
 
     prompt.closeCallback = function()
     {
-      // in our closeSubstate override, we set the uiStateMachine, so no need to set here
       if (onClose != null) onClose();
     }
 
@@ -435,10 +332,9 @@ class MainMenuState extends MusicBeatState
   {
     if (menuItems == null) return;
 
-    uiStateMachine.transition(Exiting); // Start fade out
+    uiStateMachine.transition(Exiting);
     rememberedSelectedIndex = menuItems.selectedIndex;
 
-    // the fadeout duration for the initial alpha tweens, not the screen wipe fadeout!
     var fadeOutDuration:Float = 0.4;
     menuItems.forEach(item ->
     {
@@ -454,7 +350,6 @@ class MainMenuState extends MusicBeatState
 
     FlxTimer.wait(fadeOutDuration, () ->
     {
-      trace('Exiting MainMenuState...');
       FlxG.switchState(state);
     });
   }
@@ -470,11 +365,9 @@ class MainMenuState extends MusicBeatState
     {
       gyroPan.add(FlxG.gyroscope.pitch * -1.25, FlxG.gyroscope.roll * -1.25);
 
-      // our pseudo damping
       gyroPan.x = MathUtil.smoothLerpPrecision(gyroPan.x, 0, elapsed, 2.5);
       gyroPan.y = MathUtil.smoothLerpPrecision(gyroPan.y, 0, elapsed, 2.5);
 
-      // how far away from bg mid do we want to pan via gyroPan
       camFollow.x = bg.getGraphicMidpoint().x - gyroPan.x;
       camFollow.y = bg.getGraphicMidpoint().y - gyroPan.y;
     }
@@ -507,14 +400,11 @@ class MainMenuState extends MusicBeatState
     if (!canInteract) return;
 
     #if FEATURE_DEBUG_MENU
-    // Open the debug menu, defaults to ` / ~
-    // This includes stuff like the Chart Editor, so it should be present on all builds.
     if (controls.DEBUG_MENU)
     {
       persistentUpdate = false;
       uiStateMachine.transition(Interacting);
 
-      // Cancel the currently flickering menu item because it's about to call a state switch
       if (menuItems != null && menuItems.busy) menuItems.cancelAccept();
 
       FlxG.state.openSubState(new DebugMenuSubState());
@@ -522,14 +412,6 @@ class MainMenuState extends MusicBeatState
     #end
 
     #if FEATURE_DEBUG_FUNCTIONS
-    // Ctrl+Alt+Shift+P = Character Unlock screen
-    // Ctrl+Alt+Shift+W = Meet requirements for Pico Unlock
-    // Ctrl+Alt+Shift+M = Revoke requirements for Pico Unlock
-    // Ctrl+Alt+Shift+R = Score/Rank conflict test
-    // Ctrl+Alt+Shift+N = Mark all characters as not seen
-    // Ctrl+Alt+Shift+E = Dump save data
-    // Ctrl+Alt+Shift+L = Force crash and create a log dump
-
     if (InputUtil.allPressedWithDebounce([CONTROL, ALT, SHIFT, P]))
     {
       FlxG.switchState(() -> new funkin.ui.charSelect.CharacterUnlockState('pico'));
@@ -538,8 +420,6 @@ class MainMenuState extends MusicBeatState
     if (InputUtil.allPressedWithDebounce([CONTROL, ALT, SHIFT, W]))
     {
       FunkinSound.playOnce(Paths.sound('confirmMenu'));
-      // Give the user a score of 1 point on Weekend 1 story mode (Easy difficulty).
-      // This makes the level count as cleared and displays the songs in Freeplay.
       funkin.save.Save.instance.setLevelScore('weekend1', 'easy', {
         score: 1,
         tallies: {
@@ -559,8 +439,6 @@ class MainMenuState extends MusicBeatState
     if (InputUtil.allPressedWithDebounce([CONTROL, ALT, SHIFT, M]))
     {
       FunkinSound.playOnce(Paths.sound('confirmMenu'));
-      // Give the user a score of 0 points on Weekend 1 story mode (all difficulties).
-      // This makes the level count as uncleared and no longer displays the songs in Freeplay.
       for (diff in ['easy', 'normal', 'hard'])
       {
         funkin.save.Save.instance.setLevelScore('weekend1', diff, {
@@ -582,8 +460,6 @@ class MainMenuState extends MusicBeatState
 
     if (InputUtil.allPressedWithDebounce([CONTROL, ALT, SHIFT, R]))
     {
-      // Give the user a hypothetical overridden score,
-      // and see if we can maintain that golden P rank.
       funkin.save.Save.instance.setSongScore('tutorial', 'easy', {
         score: 1234567,
         tallies: {
@@ -620,7 +496,6 @@ class MainMenuState extends MusicBeatState
 
   function goOptions():Void
   {
-    trace("OPTIONS: Interact complete.");
     startExitState(() -> new funkin.ui.options.OptionsState());
   }
 
