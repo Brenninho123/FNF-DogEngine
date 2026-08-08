@@ -1,6 +1,6 @@
-<div align='center'><img src="docs/readme_images/FNF_logo.png" width="800">
+<div align='center'><img src="docs/readme_images/dogo_logo.png" width="800">
 
-<h2>Friday Night Funkin' is a rhythm game. Built using HaxeFlixel for <a href="https://ldjam.com/events/ludum-dare/47">Ludum Dare 47.</a></h2>
+<h2>Friday Night Funkin' Dog Engine is a rhythm game. Built using HaxeFlixel for <a href="https://ldjam.com/events/ludum-dare/47">Ludum Dare 47.</a></h2>
 
 This game was made with love to Newgrounds and its community. Extra love to Tom Fulp.
 
