@@ -81,6 +81,9 @@ jobs:
           cd "$HXCPP_PATH/tools/hxcpp"
           haxe compile.hxml
 
+      - name: Build Lime host ndll
+        run: haxelib run lime rebuild cpp
+
       - name: Install lime and openfl (Android only)
         run: haxelib run lime setup android -y
 
